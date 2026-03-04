@@ -1,0 +1,93 @@
+#!/sbin/openrc-run
+
+# backward compatibility for existing gentoo layout
+#
+if [ -d "/var/lib/bitcoincashII/.bitcoincashII" ]; then
+	BITCOINCASHIID_DEFAULT_DATADIR="/var/lib/bitcoincashII/.bitcoincashII"
+else
+	BITCOINCASHIID_DEFAULT_DATADIR="/var/lib/bitcoincashIId"
+fi
+
+BITCOINCASHIID_CONFIGFILE=${BITCOINCASHIID_CONFIGFILE:-/etc/bitcoincashII/bitcoin.conf}
+BITCOINCASHIID_PIDDIR=${BITCOINCASHIID_PIDDIR:-/var/run/bitcoincashIId}
+BITCOINCASHIID_PIDFILE=${BITCOINCASHIID_PIDFILE:-${BITCOINCASHIID_PIDDIR}/bitcoincashIId.pid}
+BITCOINCASHIID_DATADIR=${BITCOINCASHIID_DATADIR:-${BITCOINCASHIID_DEFAULT_DATADIR}}
+BITCOINCASHIID_USER=${BITCOINCASHIID_USER:-${BITCOINCASHII_USER:-bitcoincashII}}
+BITCOINCASHIID_GROUP=${BITCOINCASHIID_GROUP:-bitcoincashII}
+BITCOINCASHIID_BIN=${BITCOINCASHIID_BIN:-/usr/bin/bitcoincashIId}
+BITCOINCASHIID_NICE=${BITCOINCASHIID_NICE:-${NICELEVEL:-0}}
+BITCOINCASHIID_OPTS="${BITCOINCASHIID_OPTS:-${BITCOINCASHII_OPTS}}"
+
+name="Bitcoin Cash II Daemon"
+description="Bitcoin Cash II cryptocurrency P2P network daemon"
+
+command="/usr/bin/bitcoincashIId"
+command_args="-pid=\"${BITCOINCASHIID_PIDFILE}\" \
+		-conf=\"${BITCOINCASHIID_CONFIGFILE}\" \
+		-datadir=\"${BITCOINCASHIID_DATADIR}\" \
+		-daemon \
+		${BITCOINCASHIID_OPTS}"
+
+required_files="${BITCOINCASHIID_CONFIGFILE}"
+start_stop_daemon_args="-u ${BITCOINCASHIID_USER} \
+			-N ${BITCOINCASHIID_NICE} -w 2000"
+pidfile="${BITCOINCASHIID_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${BITCOINCASHIID_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${BITCOINCASHIID_USER}:${BITCOINCASHIID_GROUP}" \
+	"${BITCOINCASHIID_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${BITCOINCASHIID_USER}:${BITCOINCASHIID_GROUP}" \
+	"${BITCOINCASHIID_PIDDIR}"
+
+	checkpath -f \
+	-o "${BITCOINCASHIID_USER}:${BITCOINCASHIID_GROUP}" \
+	-m 0660 \
+	"${BITCOINCASHIID_CONFIGFILE}"
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if grep -qs '^rpcuser=' "${BITCOINCASHIID_CONFIGFILE}" && \
+		! grep -qs '^rpcpassword=' "${BITCOINCASHIID_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run bitcoincashIId."
+		eerror "The setting must appear in ${BITCOINCASHIID_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Bitcoin Cash II Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

@@ -1,0 +1,33 @@
+# /etc/conf.d/bitcoincashIId: config file for /etc/init.d/bitcoincashIId
+
+# Config file location
+#BITCOINCASHIID_CONFIGFILE="/etc/bitcoincashII/bitcoin.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOINCASHIID_USER)
+#BITCOINCASHIID_PIDDIR="/var/run/bitcoincashIId"
+
+# What filename to give the pidfile
+#BITCOINCASHIID_PIDFILE="${BITCOINCASHIID_PIDDIR}/bitcoincashIId.pid"
+
+# Where to write bitcoincashIId data (be mindful that the blockchain is large)
+#BITCOINCASHIID_DATADIR="/var/lib/bitcoincashIId"
+
+# User and group to own bitcoincashIId process
+#BITCOINCASHIID_USER="bitcoincashII"
+#BITCOINCASHIID_GROUP="bitcoincashII"
+
+# Path to bitcoincashIId executable
+#BITCOINCASHIID_BIN="/usr/bin/bitcoincashIId"
+
+# Nice value to run bitcoincashIId under
+#BITCOINCASHIID_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#BITCOINCASHIID_OPTS=""
+
+# The timeout in seconds OpenRC will wait for bitcoincashIId to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+BITCOINCASHIID_SIGTERM_TIMEOUT=600

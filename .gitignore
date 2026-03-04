@@ -1,0 +1,78 @@
+# Build artifacts
+*.o
+*.lo
+*.la
+*.a
+*.so
+*.dylib
+*.Po
+*.Plo
+*.deps/
+.dirstamp
+.libs/
+
+# Autotools generated
+Makefile
+!doc/man/Makefile.in
+!src/qt/Makefile
+!src/qt/test/Makefile
+!src/test/Makefile
+aclocal.m4
+autom4te.cache/
+config.log
+config.status
+configure
+libtool
+stamp-h1
+
+# Build directories
+src/Makefile
+src/config/bitcoinII-config.h
+libbitcoinIIconsensus.pc
+
+# Compiled binaries
+src/bitcoincashIId
+src/bitcoincashII-cli
+src/bitcoincashII-tx
+src/bitcoincashII-util
+src/bitcoincashII-wallet
+src/bitcoincashII-qt
+src/qt/bitcoincashII-qt
+src/test/test_bitcoincashII
+src/test/fuzz/fuzz
+
+# Backup files
+*~
+*.bak
+*.orig
+*.original
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+
+# Test cache
+test/cache/
+
+# OS
+.DS_Store
+Thumbs.db
+src/test/test_bitcoinII
+src/libbitcoinII_*.a
+src/test/fuzz/fuzz
+build-*/
+release/
+depends/SDKs/
+depends/built/
+depends/sources/
+depends/arm64-apple-darwin/
+depends/x86_64-apple-darwin/
+depends/x86_64-w64-mingw32/
+*.exe
+build/

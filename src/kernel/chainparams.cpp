@@ -1,0 +1,707 @@
+// Copyright (c) 2009-2025 Satoshi Nakamoto
+// Copyright (c) 2009-2024 The Bitcoin Core developers
+// Copyright (c) 2024-2025 The BitcoinII developers
+// Copyright (c) 2025 The Bitcoin Cash II developers
+// Forked from Bitcoin Core version 0.27.0
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include <kernel/chainparams.h>
+
+#include <chainparamsseeds.h>
+#include <consensus/amount.h>
+#include <consensus/merkle.h>
+#include <consensus/params.h>
+#include <hash.h>
+#include <kernel/messagestartchars.h>
+#include <logging.h>
+#include <primitives/block.h>
+#include <primitives/transaction.h>
+#include <script/interpreter.h>
+#include <script/script.h>
+#include <uint256.h>
+#include <util/chaintype.h>
+#include <util/strencodings.h>
+
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <cstring>
+#include <type_traits>
+
+static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
+{
+    CMutableTransaction txNew;
+    txNew.nVersion = 1;
+    txNew.vin.resize(1);
+    txNew.vout.resize(1);
+    txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+    txNew.vout[0].nValue = genesisReward;
+    txNew.vout[0].scriptPubKey = genesisOutputScript;
+
+    CBlock genesis;
+    genesis.nTime    = nTime;
+    genesis.nBits    = nBits;
+    genesis.nNonce   = nNonce;
+    genesis.nVersion = nVersion;
+    genesis.vtx.push_back(MakeTransactionRef(std::move(txNew)));
+    genesis.hashPrevBlock.SetNull();
+    genesis.hashMerkleRoot = BlockMerkleRoot(genesis);
+    return genesis;
+}
+
+/**
+ * Build the genesis block. Note that the output of its generation
+ * transaction cannot be spent since it did not originally exist in the
+ * database.
+ *
+ * CBlock(hash=000000000019d6, ver=1, hashPrevBlock=00000000000000, hashMerkleRoot=4a5e1e, nTime=1231006505, nBits=1d00ffff, nNonce=2083236893, vtx=1)
+ *   CTransaction(hash=4a5e1e, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+ *     CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73)
+ *     CTxOut(nValue=50.00000000, scriptPubKey=0x5F1DF16B2B704C8A578D0B)
+ *   vMerkleTree: 4a5e1e
+ */
+static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
+{
+    const char* pszTimestamp = "BBC News 12/04/2024 French government collapses in no-confidence vote";
+    const CScript genesisOutputScript = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
+    return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
+}
+
+/**
+ * Main network on which people trade goods and services.
+ */
+class CMainParams : public CChainParams {
+public:
+    CMainParams() {
+        m_chain_type = ChainType::MAIN;
+        consensus.signet_blocks = false;
+        consensus.signet_challenge.clear();
+        consensus.nSubsidyHalvingInterval = 210000;
+        consensus.script_flag_exceptions.emplace( // BIP16 exception
+            uint256S("0x0000000028f062b221c1a8a5cf0244b1627315f7aa5b775b931cfec46dc17ceb"), SCRIPT_VERIFY_NONE);
+        consensus.script_flag_exceptions.emplace( // Taproot exception
+            uint256S("0x0000000028f062b221c1a8a5cf0244b1627315f7aa5b775b931cfec46dc17ceb"), SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_WITNESS);
+        // Static BIP heights (ISM)
+        consensus.BIP34Height = 250;
+        consensus.BIP34Hash = uint256S("000000008e0241217a0c31509cc92ef8367d6add5668e07fd36269e287b5e7ef");
+        consensus.BIP65Height = 260;
+        consensus.BIP66Height = 270;
+
+        // CSV (CheckSequenceVerify)
+        consensus.CSVHeight = 280;
+
+        // Segwit softfork (disabled after BCH2 fork via IsSegwitActive())
+        consensus.SegwitHeight = 290;
+
+        // =========================================================================
+        // BCH2 Fork Parameters - All BCH features activate at fork height + 1
+        // Fork from BC2 at block 53200 (estimated March 7, 2026)
+        // =========================================================================
+        consensus.BCH2ForkHeight = 53200;
+
+        // All BCH upgrades activate immediately after fork
+        // (BCH2 starts as fully-upgraded BCH)
+        consensus.uahfHeight = 53200;              // UAHF - 8MB blocks, no SegWit, SIGHASH_FORKID
+        consensus.daaHeight = 53200;               // New DAA (pre-ASERT)
+        consensus.magneticAnomalyHeight = 53200;   // CTOR, OP_CHECKDATASIG, clean stack
+        consensus.gravitonHeight = 53200;          // Schnorr sigs, SegWit recovery
+        consensus.phononHeight = 53200;            // OP_REVERSEBYTES, SigChecks
+        consensus.axionHeight = 53200;             // ASERT DAA
+        consensus.upgrade8Height = 53200;          // Native introspection, 64-bit integers
+        consensus.upgrade9Height = 53200;          // CHIP limits, P2SH32
+        consensus.upgrade10Height = 53200;         // VM Limits, BigInt
+        consensus.upgrade11Height = 53200;         // ABLA
+
+        // ASERT anchor at block 53201 (first BCH2 block)
+        // Block 53200 = last BC2 block (fork point)
+        // Block 53201 = first BCH2 block (anchor) - gets anchorBits directly
+        //
+        // anchorBits = 0x1903a30c = ~140M difficulty (suitable for 1 PH/s)
+        // anchorParentTime = block 53200's timestamp (2026-03-04 18:33:00 UTC)
+        consensus.asertAnchorParams = Consensus::ASERTAnchor{
+            53201,        // anchor height (first BCH2 block)
+            0x1903a30c,   // ~140M difficulty (1 PH/s can mine ~10 min blocks)
+            1772649180,   // block 53200 timestamp (anchorParentTime)
+        };
+
+        // ASERT half-life: Starts at 1 hour, transitions to 2 days at block 92736
+        // - 1 hour (3600s): Fast recovery for new chain, protects against griefing
+        // - 2 days (172800s): Stability once chain matures (~9 months after fork)
+        // Transition at epoch 46 boundary (block 92736) - no hard fork needed
+        consensus.nASERTHalfLife = Consensus::Params::ASERT_HALFLIFE_1_HOUR;
+        consensus.nASERTHalfLifeTransitionHeight = 92736;  // Epoch 46, ~9 months after fork
+
+        // Default block size (32MB for BCH)
+        consensus.nDefaultConsensusBlockSize = 32000000;
+
+        // BCHN-style automatic finalization (rolling checkpoints)
+        // Blocks deeper than this from the tip are finalized and cannot be reorged
+        consensus.maxReorgDepth = 10;
+        // =========================================================================
+
+        consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
+        consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
+
+        // Taproot - DISABLED (requires SegWit which BCH2 doesn't support)
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0;
+
+        // Disable TESTDUMMY deployment
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].min_activation_height = 0;
+
+        consensus.MinBIP9WarningHeight = 292; // segwit activation height + miner confirmation window
+
+        // Mining/difficulty rules
+        consensus.powLimit = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60;
+        consensus.nPowTargetSpacing = 10 * 60;
+        consensus.fPowAllowMinDifficultyBlocks = false;
+        consensus.fPowNoRetargeting = false;
+
+        // Chainwork at fork height 53200 - protects against fake BC2 history
+        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000a78f61a5e60e5177ca5a");
+        // Fork block 53200 - skip script verification for blocks up to this hash
+        consensus.defaultAssumeValid = uint256S("0x000000000000000004e4eb1fc8bc2f79f3d0023cbc531a6b9c78052ef187c7de");
+
+        /**
+         * The message start string is designed to be unlikely to occur in normal data.
+         * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
+         * a large 32-bit integer with any alignment.
+         */
+        pchMessageStart[0] = 0xb2;
+        pchMessageStart[1] = 0xc2;
+        pchMessageStart[2] = 0xb2;
+        pchMessageStart[3] = 0xc2;
+        nDefaultPort = 8339;
+        nPruneAfterHeight = 200000;
+        m_assumed_blockchain_size = 10;
+        m_assumed_chain_state_size = 10;
+
+        genesis = CreateGenesisBlock(1734019071, 1597163478, 0x1d00ffff, 1, 50 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        assert(consensus.hashGenesisBlock == uint256S("0x0000000028f062b221c1a8a5cf0244b1627315f7aa5b775b931cfec46dc17ceb"));
+        assert(genesis.hashMerkleRoot == uint256S("0x80d1b4e9ca868f83b88b9301036205876072bdd3ded0ad4dc022e1f9266ddc49"));
+
+        // Note that of those which support the service bits prefix, most only support a subset of
+        // possible options.
+        // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
+        // service bits we want, but we should get them updated to support all service bits wanted by any
+        // release ASAP to avoid it where possible.
+        // BCH2 DNS seeders
+        vSeeds.emplace_back("dnsseed1.bch2.org.");
+        vSeeds.emplace_back("dnsseed2.bch2.org.");
+
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,0);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,128);
+        base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
+        base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
+
+        bech32_hrp = "bc";
+
+        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_main), std::end(chainparams_seed_main));
+
+        fDefaultConsistencyChecks = false;
+        m_is_mockable_chain = false;
+
+        checkpointData = {
+            {
+                { 50, uint256S("0x000000001edb1b92b898111135767e3e4b86eeac0ada772ffca8c4f00302105b")},
+                { 250, uint256S("0x000000008e0241217a0c31509cc92ef8367d6add5668e07fd36269e287b5e7ef")},
+                { 260, uint256S("0x000000009b9a28c9368119f47479cfb0024d957d7416efcc0cc550acce627234")},
+                { 270, uint256S("0x00000000ab1c93522aa21d8461f37c3f70c34e4c6bfff5d9737026aa46e08b0b")},
+                { 280, uint256S("0x00000000ad2f324d3b3cf38ecfd168004b66346a0e447eda7bd73c2573805a42")},
+                { 290, uint256S("0x0000000043d4294e484e2f10ad2c5a8d19bc8d60295a33f7c804dbed872cced8")},
+                { 425, uint256S("0x00000000dc956ee0d18f0e8f401c4dc3f248d00ca1c3f8ea0d60c6842b022390")},
+                { 500, uint256S("0x00000000d89bb3d9e7410a1cc00e48eac1c8af5d27f781465e732d0a22ed868a")},
+                { 750, uint256S("0x000000004ffbcd37f7da4b112dc0a782b39bb014c12a4cd38fd961027a0f86dd")},
+                { 1000, uint256S("0x00000000d7e4e8062230de032e163c9ccf082568ec3db3e345acc1065cabf2d3")},
+                { 1250, uint256S("0x000000008abd7b9793c776183bdf14731c45466e43049691dbdc2687b90d1779")},
+                { 1500, uint256S("0x000000000381048281f3d4be6b23d424b43f11502a95d862c5f316fc8dfe7859")},
+                { 1750, uint256S("0x0000000089e45559192c25bc437e34dad753c443d6418cdbc06f9d1d000155a7")},
+                { 1900, uint256S("0x000000004e4b848131fb1e3615d0c4ca2f1a613e22e02bf4cacfa31b11dd4260")},
+                { 2000, uint256S("0x0000000092460949b8686786acea9333d407bce955aff6f6a5f8d16d29644ffc")},
+                { 2016, uint256S("0x000000001477dda4e29a1333f4ed3702bca0040fada8d8254ce02f180873e182")},
+                { 10000, uint256S("0x000000000034a7f5c7100e911ab43ce02ac228c9e8ac2ae9fe7a1eb61914cdc0")},
+                { 15000, uint256S("0x0000000000048dbb85404da5d97fbdb9b5c15dcd9b41239d49a6ff3f13d2b0b8")},
+                { 20000, uint256S("0x0000000000009d769d62468e90627f274ef7d83f3f99ce6bfc128991cd57a53a")},
+                { 25000, uint256S("0x00000000000000b393c072088fd2ef8bcdacc05e15fe937b8b09ca1241877a7f")},
+                { 30000, uint256S("0x000000000000001fc3181c713894a3e1f92b2b74b37a01dac267e58e2d53669c")},
+                { 49000, uint256S("0x000000000000000003016ffca13aaee2ac07ea3edb81e7e612ccce9c98c7ca04")},
+                { 53200, uint256S("0x000000000000000004e4eb1fc8bc2f79f3d0023cbc531a6b9c78052ef187c7de")}, // BCH2 fork block
+                { 53201, uint256S("0x000000000000000320d0ad9aaec4e452df15cbb709175687ae8de4831fc33934")}, // First BCH2 block
+                { 53210, uint256S("0x0000000000000005d5941cd66c2ad2361ee652ec7b8b02e4fa3cce41a4d4bb33")},
+                { 53220, uint256S("0x0000000000000001ed29c6e548012a17b9141c2b98fe1fc8a4311a9e2365b559")},
+                { 53224, uint256S("0x0000000000000000193e4b5e64087214c484d8f9ca9e54e32b3140d8b3a1fbcd")},
+            }
+        };
+
+        m_assumeutxo_data = {
+            // TODO to be specified in a future patch.
+        };
+
+        chainTxData = ChainTxData{
+            // Data from RPC: getchaintxstats 4096 00000000000000001984b0fe236bec1ec49a14a01d8d340c31cae864d96a3b9b
+            .nTime    = 1764034154,
+            .nTxCount = 82281,
+            .dTxRate  = 0.004174125833742384,
+        };
+    }
+};
+
+/**
+ * Testnet (v3): public test network which is reset from time to time.
+ */
+class CTestNetParams : public CChainParams {
+public:
+    CTestNetParams() {
+        m_chain_type = ChainType::TESTNET;
+        consensus.signet_blocks = false;
+        consensus.signet_challenge.clear();
+        consensus.nSubsidyHalvingInterval = 210000;
+        consensus.script_flag_exceptions.emplace( // BIP16 exception
+            uint256S("0x00000000dd30457c001f4095d208cc1296b0eed002427aa599874af7a432b105"), SCRIPT_VERIFY_NONE);
+        // BIP heights - active from early blocks for fresh BCH2 testnet
+        consensus.BIP34Height = 1;
+        consensus.BIP34Hash = uint256{};
+        consensus.BIP65Height = 1;
+        consensus.BIP66Height = 1;
+        consensus.CSVHeight = 1;
+        consensus.SegwitHeight = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.MinBIP9WarningHeight = 0;
+
+        // =========================================================================
+        // BCH2 Fork Parameters - Active from genesis for fresh testnet
+        // =========================================================================
+        consensus.BCH2ForkHeight = 0;
+        consensus.uahfHeight = 0;
+        consensus.daaHeight = 0;
+        consensus.magneticAnomalyHeight = 0;
+        consensus.gravitonHeight = 0;
+        consensus.phononHeight = 0;
+        consensus.axionHeight = 0;
+        consensus.upgrade8Height = 0;
+        consensus.upgrade9Height = 0;
+        consensus.upgrade10Height = 0;
+        consensus.upgrade11Height = 0;
+
+        // ASERT anchor at genesis
+        consensus.asertAnchorParams = Consensus::ASERTAnchor{
+            0,            // anchor block height (genesis)
+            0x1d00ffff,   // genesis nBits
+            1750495449,   // genesis timestamp (used as synthetic parent time)
+        };
+
+        // Default block size (32MB - BCH2 standard)
+        consensus.nDefaultConsensusBlockSize = 32000000;
+
+        // ASERT half-life: Starts at 1 hour, transitions to 2 days
+        // Testnet mirrors mainnet behavior for realistic testing
+        consensus.nASERTHalfLife = Consensus::Params::ASERT_HALFLIFE_1_HOUR;
+        consensus.nASERTHalfLifeTransitionHeight = 40320;  // Epoch 20, ~9 months
+
+        // BCHN-style automatic finalization (rolling checkpoints)
+        consensus.maxReorgDepth = 10;
+        // =========================================================================
+
+        consensus.powLimit = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
+        consensus.nPowTargetSpacing = 10 * 60;
+        consensus.fPowAllowMinDifficultyBlocks = true;
+        consensus.fPowNoRetargeting = false;
+        consensus.nRuleChangeActivationThreshold = 1512; // 75% for testchains
+        consensus.nMinerConfirmationWindow = 2016;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].min_activation_height = 0;
+
+        // Taproot - DISABLED (requires SegWit which BCH2 doesn't support)
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0;
+
+        consensus.nMinimumChainWork = uint256S("0x00");
+        consensus.defaultAssumeValid = uint256S("0x00");
+
+        // BCH2 testnet-specific magic (avoids collision with Bitcoin Core testnet3)
+        pchMessageStart[0] = 0xb2;
+        pchMessageStart[1] = 0xc2;
+        pchMessageStart[2] = 0x0b;
+        pchMessageStart[3] = 0x11;
+        nDefaultPort = 18338;
+        nPruneAfterHeight = 1000;
+        m_assumed_blockchain_size = 42;
+        m_assumed_chain_state_size = 3;
+
+        genesis = CreateGenesisBlock(1750495449, 344360033, 0x1d00ffff, 1, 50 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        assert(consensus.hashGenesisBlock == uint256S("0x000000004d52d701341aa65ad81dfd0b9c29132d261fc8b8a7f4ebcd75633c37"));
+        assert(genesis.hashMerkleRoot == uint256S("0x80d1b4e9ca868f83b88b9301036205876072bdd3ded0ad4dc022e1f9266ddc49"));
+
+        vFixedSeeds.clear();
+        vSeeds.clear();
+        // nodes with support for servicebits filtering should be at the top
+        // BCH2 DISABLED: vSeeds.emplace_back("testnet-seed.bitcoin.jonasschnelli.ch.");
+        // BCH2 DISABLED: vSeeds.emplace_back("seed.tbtc.petertodd.net.");
+        // BCH2 DISABLED: vSeeds.emplace_back("seed.testnet.bitcoin.sprovoost.nl.");
+        // BCH2 DISABLED: vSeeds.emplace_back("testnet-seed.bluematt.me.");
+
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
+        base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
+        base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
+
+        bech32_hrp = "tb";
+
+        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_test), std::end(chainparams_seed_test));
+
+        fDefaultConsistencyChecks = false;
+        m_is_mockable_chain = false;
+
+        // BCH2 testnet: fresh chain from genesis, no pre-fork checkpoints
+        checkpointData = {{}};
+
+        // BCH2 testnet: no assumeutxo data yet (fresh chain)
+        m_assumeutxo_data = {};
+
+        chainTxData = ChainTxData{
+            // BCH2 testnet: no historical data yet
+            .nTime    = 0,
+            .nTxCount = 0,
+            .dTxRate  = 0,
+        };
+    }
+};
+
+/**
+ * Signet: test network with an additional consensus parameter (see BIP325).
+ */
+class SigNetParams : public CChainParams {
+public:
+    explicit SigNetParams(const SigNetOptions& options)
+    {
+        std::vector<uint8_t> bin;
+        vSeeds.clear();
+
+        if (!options.challenge) {
+            bin = ParseHex("512103ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d1e086be430210359ef5021964fe22d6f8e05b2463c9540ce96883fe3b278760f048f5189f2e6c452ae");
+            // BCH2 DISABLED: vSeeds.emplace_back("seed.signet.bitcoin.sprovoost.nl.");
+
+            // Hardcoded nodes can be removed once there are more DNS seeds
+            // BCH2 DISABLED: vSeeds.emplace_back("178.128.221.177");
+            // BCH2 DISABLED: vSeeds.emplace_back("v7ajjeirttkbnt32wpy3c6w3emwnfr3fkla7hpxcfokr3ysd3kqtzmqd.onion:38333");
+
+            consensus.nMinimumChainWork = uint256S("0x00");
+            consensus.defaultAssumeValid = uint256S("0x00");
+            m_assumed_blockchain_size = 1;
+            m_assumed_chain_state_size = 0;
+            chainTxData = ChainTxData{
+                // Data from RPC: getchaintxstats 4096 0000000870f15246ba23c16e370a7ffb1fc8a3dcf8cb4492882ed4b0e3d4cd26
+                .nTime    = 1706331472,
+                .nTxCount = 2425380,
+                .dTxRate  = 0.008277759863833788,
+            };
+        } else {
+            bin = *options.challenge;
+            consensus.nMinimumChainWork = uint256{};
+            consensus.defaultAssumeValid = uint256{};
+            m_assumed_blockchain_size = 0;
+            m_assumed_chain_state_size = 0;
+            chainTxData = ChainTxData{
+                0,
+                0,
+                0,
+            };
+            LogPrintf("Signet with challenge %s\n", HexStr(bin));
+        }
+
+        if (options.seeds) {
+            vSeeds = *options.seeds;
+        }
+
+        m_chain_type = ChainType::SIGNET;
+        consensus.signet_blocks = true;
+        consensus.signet_challenge.assign(bin.begin(), bin.end());
+        consensus.nSubsidyHalvingInterval = 210000;
+        consensus.BIP34Height = 1;
+        consensus.BIP34Hash = uint256{};
+        consensus.BIP65Height = 1;
+        consensus.BIP66Height = 1;
+        consensus.CSVHeight = 1;
+        consensus.SegwitHeight = 1;
+
+        // =========================================================================
+        // BCH2 Fork Parameters - Disabled on signet
+        // =========================================================================
+        consensus.BCH2ForkHeight = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.uahfHeight = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.daaHeight = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.magneticAnomalyHeight = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.gravitonHeight = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.phononHeight = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.axionHeight = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.upgrade8Height = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.upgrade9Height = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.upgrade10Height = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.upgrade11Height = Consensus::NEVER_ACTIVE_HEIGHT;
+        consensus.asertAnchorParams = Consensus::ASERTAnchor{};
+        consensus.nDefaultConsensusBlockSize = 1000000;
+
+        // ASERT half-life: 1 hour for signet (no transition, BCH2 fork disabled)
+        consensus.nASERTHalfLife = Consensus::Params::ASERT_HALFLIFE_1_HOUR;
+        // =========================================================================
+
+        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
+        consensus.nPowTargetSpacing = 10 * 60;
+        consensus.fPowAllowMinDifficultyBlocks = false;
+        consensus.fPowNoRetargeting = false;
+        consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
+        consensus.nMinerConfirmationWindow = 2016;
+        consensus.MinBIP9WarningHeight = 0;
+        consensus.powLimit = uint256S("00000377ae000000000000000000000000000000000000000000000000000000");
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].min_activation_height = 0;
+
+        // Taproot - DISABLED (requires SegWit which BCH2 doesn't support)
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0;
+
+        // message start is defined as the first 4 bytes of the sha256d of the block script
+        HashWriter h{};
+        h << consensus.signet_challenge;
+        uint256 hash = h.GetHash();
+        std::copy_n(hash.begin(), 4, pchMessageStart.begin());
+
+        nDefaultPort = 38338;
+        nPruneAfterHeight = 1000;
+
+        genesis = CreateGenesisBlock(1750495451, 2366523058, 0x1d00ffff, 1, 50 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        assert(consensus.hashGenesisBlock == uint256S("0x00000000b365b3110f1c1f6ab3c6bce212c8cbdfacd07cf68767425e916f330c"));
+        assert(genesis.hashMerkleRoot == uint256S("0x80d1b4e9ca868f83b88b9301036205876072bdd3ded0ad4dc022e1f9266ddc49"));
+
+        vFixedSeeds.clear();
+
+        m_assumeutxo_data = {
+            {
+                .height = 160'000,
+                .hash_serialized = AssumeutxoHash{uint256S("0xfe0a44309b74d6b5883d246cb419c6221bcccf0b308c9b59b7d70783dbdf928a")},
+                .nChainTx = 2289496,
+                .blockhash = uint256S("0x0000003ca3c99aff040f2563c2ad8f8ec88bd0fd6b8f0895cfaf1ef90353a62c")
+            }
+        };
+
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
+        base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
+        base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
+
+        bech32_hrp = "tb";
+
+        fDefaultConsistencyChecks = false;
+        m_is_mockable_chain = false;
+    }
+};
+
+/**
+ * Regression test: intended for private networks only. Has minimal difficulty to ensure that
+ * blocks can be found instantly.
+ */
+class CRegTestParams : public CChainParams
+{
+public:
+    explicit CRegTestParams(const RegTestOptions& opts)
+    {
+        m_chain_type = ChainType::REGTEST;
+        consensus.signet_blocks = false;
+        consensus.signet_challenge.clear();
+        consensus.nSubsidyHalvingInterval = 150;
+        consensus.BIP34Height = 1; // Always active unless overridden
+        consensus.BIP34Hash = uint256();
+        consensus.BIP65Height = 1;  // Always active unless overridden
+        consensus.BIP66Height = 1;  // Always active unless overridden
+        consensus.CSVHeight = 1;    // Always active unless overridden
+        consensus.SegwitHeight = 0; // Always active unless overridden
+        consensus.MinBIP9WarningHeight = 0;
+
+        // =========================================================================
+        // BCH2 Fork Parameters - Configurable for regtest
+        // Default: BCH2 activates at height 200 for easy testing
+        // Set to NEVER_ACTIVE_HEIGHT to run in Bitcoin Core compatible mode
+        // =========================================================================
+        consensus.BCH2ForkHeight = 200;
+        consensus.uahfHeight = 200;
+        consensus.daaHeight = 200;
+        consensus.magneticAnomalyHeight = 200;
+        consensus.gravitonHeight = 200;
+        consensus.phononHeight = 200;
+        consensus.axionHeight = 200;
+        consensus.upgrade8Height = 200;
+        consensus.upgrade9Height = 200;
+        consensus.upgrade10Height = 200;
+        consensus.upgrade11Height = 200;
+
+        // ASERT anchor for regtest - anchor at first post-fork block (201)
+        // Same pattern as mainnet: fork at 200, anchor at 201
+        // Anchor parent time = 0 means use block 200's timestamp dynamically
+        consensus.asertAnchorParams = Consensus::ASERTAnchor{
+            201,          // anchor block height (first BCH2 block)
+            0x207fffff,   // regtest minimum difficulty
+            0,            // 0 = dynamically use parent block's timestamp
+        };
+
+        // Default block size (32MB for BCH mode)
+        consensus.nDefaultConsensusBlockSize = 32000000;
+
+        // ASERT half-life: Starts at 1 hour, transitions to 2 days at block 432
+        // Low transition height for regtest allows testing the transition
+        consensus.nASERTHalfLife = Consensus::Params::ASERT_HALFLIFE_1_HOUR;
+        consensus.nASERTHalfLifeTransitionHeight = 432;  // Low height for testing
+
+        // BCHN-style automatic finalization (rolling checkpoints)
+        // High value for regtest to allow deep reorg testing while still
+        // exercising the finalization code path. Mainnet/testnet use 10.
+        consensus.maxReorgDepth = 10000;
+        // =========================================================================
+
+        consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
+        consensus.nPowTargetSpacing = 10 * 60;
+        consensus.fPowAllowMinDifficultyBlocks = true;
+        consensus.fPowNoRetargeting = true;
+        consensus.nRuleChangeActivationThreshold = 108; // 75% for testchains
+        consensus.nMinerConfirmationWindow = 144; // Faster than normal for regtest
+
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 0;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].min_activation_height = 0;
+
+        // Taproot - DISABLED (requires SegWit which BCH2 doesn't support)
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0;
+
+        consensus.nMinimumChainWork = uint256{};
+        consensus.defaultAssumeValid = uint256{};
+
+        pchMessageStart[0] = 0xb2;
+        pchMessageStart[1] = 0xc2;
+        pchMessageStart[2] = 0xfa;
+        pchMessageStart[3] = 0xbf;
+        nDefaultPort = 18448;
+        nPruneAfterHeight = opts.fastprune ? 100 : 1000;
+        m_assumed_blockchain_size = 0;
+        m_assumed_chain_state_size = 0;
+
+        for (const auto& [dep, height] : opts.activation_heights) {
+            switch (dep) {
+            case Consensus::BuriedDeployment::DEPLOYMENT_SEGWIT:
+                consensus.SegwitHeight = int{height};
+                break;
+            case Consensus::BuriedDeployment::DEPLOYMENT_HEIGHTINCB:
+                consensus.BIP34Height = int{height};
+                break;
+            case Consensus::BuriedDeployment::DEPLOYMENT_DERSIG:
+                consensus.BIP66Height = int{height};
+                break;
+            case Consensus::BuriedDeployment::DEPLOYMENT_CLTV:
+                consensus.BIP65Height = int{height};
+                break;
+            case Consensus::BuriedDeployment::DEPLOYMENT_CSV:
+                consensus.CSVHeight = int{height};
+                break;
+            }
+        }
+
+        for (const auto& [deployment_pos, version_bits_params] : opts.version_bits_parameters) {
+            consensus.vDeployments[deployment_pos].nStartTime = version_bits_params.start_time;
+            consensus.vDeployments[deployment_pos].nTimeout = version_bits_params.timeout;
+            consensus.vDeployments[deployment_pos].min_activation_height = version_bits_params.min_activation_height;
+        }
+
+        // nonce=0 works with this easy difficulty
+        genesis = CreateGenesisBlock(1750495460, 0, 0x207fffff, 1, 50 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        assert(consensus.hashGenesisBlock == uint256S("0x5ac3b379cfa0600d059b007cb2b6b1b293832f6e398af62ec4e009b369e532b6"));
+        assert(genesis.hashMerkleRoot == uint256S("0x80d1b4e9ca868f83b88b9301036205876072bdd3ded0ad4dc022e1f9266ddc49"));
+
+        vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
+        vSeeds.clear();
+        // BCH2 DISABLED: vSeeds.emplace_back("dummySeed.invalid.");
+
+        fDefaultConsistencyChecks = true;
+        m_is_mockable_chain = true;
+
+        checkpointData = {
+            {
+                {0, uint256S("5ac3b379cfa0600d059b007cb2b6b1b293832f6e398af62ec4e009b369e532b6")},
+            }
+        };
+
+        m_assumeutxo_data = {
+            {
+                .height = 110,
+                .hash_serialized = AssumeutxoHash{uint256S("0x6657b736d4fe4db0cbc796789e812d5dba7f5c143764b1b6905612f1830609d1")},
+                .nChainTx = 111,
+                .blockhash = uint256S("0x696e92821f65549c7ee134edceeeeaaa4105647a3c4fd9f298c0aec0ab50425c")
+            },
+            {
+                // For use by test/functional/feature_assumeutxo.py
+                .height = 299,
+                .hash_serialized = AssumeutxoHash{uint256S("0xa4bf3407ccb2cc0145c49ebba8fa91199f8a3903daf0883875941497d2493c27")},
+                .nChainTx = 334,
+                .blockhash = uint256S("0x3bb7ce5eba0be48939b7a521ac1ba9316afee2c7bada3a0cca24188e6d7d96c0")
+            },
+        };
+
+        chainTxData = ChainTxData{
+            0,
+            0,
+            0
+        };
+
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
+        base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
+        base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
+
+        bech32_hrp = "bcrt";
+    }
+};
+
+std::unique_ptr<const CChainParams> CChainParams::SigNet(const SigNetOptions& options)
+{
+    return std::make_unique<const SigNetParams>(options);
+}
+
+std::unique_ptr<const CChainParams> CChainParams::RegTest(const RegTestOptions& options)
+{
+    return std::make_unique<const CRegTestParams>(options);
+}
+
+std::unique_ptr<const CChainParams> CChainParams::Main()
+{
+    return std::make_unique<const CMainParams>();
+}
+
+std::unique_ptr<const CChainParams> CChainParams::TestNet()
+{
+    return std::make_unique<const CTestNetParams>();
+}
