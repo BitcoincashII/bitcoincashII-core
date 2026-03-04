@@ -12,6 +12,7 @@
 #include <script/script.h>
 #include <serialize.h>
 #include <sync.h> // for thread safety macros
+#include <kernel/cs_main.h> // for cs_main
 
 class CCoinsView;
 class CTxMemPool;

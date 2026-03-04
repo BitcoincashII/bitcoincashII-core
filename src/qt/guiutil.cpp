@@ -151,8 +151,8 @@ void AddButtonShortcut(QAbstractButton* button, const QKeySequence& shortcut)
 
 bool parseBitcoinIIURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // return if URI is not valid or is no bch2: URI
-    if(!uri.isValid() || uri.scheme() != QString("bch2"))
+    // return if URI is not valid or is no bitcoincashii: URI
+    if(!uri.isValid() || (uri.scheme() != QString("bitcoincashii") && uri.scheme() != QString("bch2")))
         return false;
 
     SendCoinsRecipient rv;
@@ -215,7 +215,13 @@ QString formatBitcoinIIURI(const SendCoinsRecipient &info)
 {
     bool bech_32 = info.address.startsWith(QString::fromStdString(Params().Bech32HRP() + "1"));
 
-    QString ret = QString("bch2:%1").arg(bech_32 ? info.address.toUpper() : info.address);
+    // Strip CashAddr prefix if present to avoid double prefix (e.g. "bitcoincashii:bitcoincashii:q...")
+    QString addr = info.address;
+    if (addr.startsWith("bitcoincashii:", Qt::CaseInsensitive)) {
+        addr = addr.mid(QString("bitcoincashii:").length());
+    }
+
+    QString ret = QString("bitcoincashii:%1").arg(bech_32 ? addr.toUpper() : addr);
     int paramCount = 0;
 
     if (info.amount)
