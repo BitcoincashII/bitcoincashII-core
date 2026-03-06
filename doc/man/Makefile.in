@@ -88,7 +88,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_BITCOINIID_TRUE@am__append_1 = bitcoinIId.1
-@ENABLE_QT_TRUE@am__append_2 = bitcoinII-qt.1
+@ENABLE_QT_TRUE@am__append_2 = bitcoincashII-qt.1
 @BUILD_BITCOINII_CLI_TRUE@am__append_3 = bitcoinII-cli.1
 @BUILD_BITCOINII_TX_TRUE@am__append_4 = bitcoinII-tx.1
 @BUILD_BITCOINII_UTIL_TRUE@am__append_5 = bitcoinII-util.1
@@ -102,8 +102,8 @@ am__aclocal_m4_deps = $(top_srcdir)/build-aux/m4/ax_boost_base.m4 \
 	$(top_srcdir)/build-aux/m4/ax_cxx_compile_stdcxx.m4 \
 	$(top_srcdir)/build-aux/m4/ax_pthread.m4 \
 	$(top_srcdir)/build-aux/m4/bitcoinII_find_bdb48.m4 \
-	$(top_srcdir)/build-aux/m4/bitcoinII_qt.m4 \
 	$(top_srcdir)/build-aux/m4/bitcoinII_subdir_to_include.m4 \
+	$(top_srcdir)/build-aux/m4/bitcoincashII_qt.m4 \
 	$(top_srcdir)/build-aux/m4/l_atomic.m4 \
 	$(top_srcdir)/build-aux/m4/l_socket.m4 \
 	$(top_srcdir)/build-aux/m4/libtool.m4 \

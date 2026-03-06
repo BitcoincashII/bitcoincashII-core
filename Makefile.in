@@ -103,8 +103,8 @@ am__aclocal_m4_deps = $(top_srcdir)/build-aux/m4/ax_boost_base.m4 \
 	$(top_srcdir)/build-aux/m4/ax_cxx_compile_stdcxx.m4 \
 	$(top_srcdir)/build-aux/m4/ax_pthread.m4 \
 	$(top_srcdir)/build-aux/m4/bitcoinII_find_bdb48.m4 \
-	$(top_srcdir)/build-aux/m4/bitcoinII_qt.m4 \
 	$(top_srcdir)/build-aux/m4/bitcoinII_subdir_to_include.m4 \
+	$(top_srcdir)/build-aux/m4/bitcoincashII_qt.m4 \
 	$(top_srcdir)/build-aux/m4/l_atomic.m4 \
 	$(top_srcdir)/build-aux/m4/l_socket.m4 \
 	$(top_srcdir)/build-aux/m4/libtool.m4 \

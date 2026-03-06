@@ -269,7 +269,7 @@ AC_ARG_WITH([mpgen],
 
 AC_ARG_ENABLE([multiprocess],
   [AS_HELP_STRING([--enable-multiprocess],
-  [build multiprocess bitcoinII-node, bitcoinII-wallet, and bitcoinII-gui executables in addition to monolithic bitcoinIId and bitcoinII-qt executables. Requires libmultiprocess library. Experimental (default is no)])],
+  [build multiprocess bitcoinII-node, bitcoinII-wallet, and bitcoincashII-gui executables in addition to monolithic bitcoinIId and bitcoincashII-qt executables. Requires libmultiprocess library. Experimental (default is no)])],
   [enable_multiprocess=$enableval],
   [enable_multiprocess=no])
 
@@ -1745,7 +1745,7 @@ if test "$bitcoinII_enable_qt" != "no"; then
     AC_MSG_WARN([xgettext is required to update qt translations])
   fi
 
-  AC_MSG_CHECKING([whether to build test_bitcoinII-qt])
+  AC_MSG_CHECKING([whether to build test_bitcoincashII-qt])
   if test "$use_gui_tests$bitcoinII_enable_qt_test" = "yesyes"; then
     AC_MSG_RESULT([yes])
     BUILD_TEST_QT="yes"

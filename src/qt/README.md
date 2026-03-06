@@ -11,7 +11,7 @@ When following your systems build instructions, make sure to install the `Qt` de
 To run:
 
 ```sh
-./src/qt/bitcoinII-qt
+./src/qt/bitcoincashII-qt
 ```
 
 ## Files and Directories
@@ -101,7 +101,7 @@ sudo apt-get install qtcreator
 1. Make sure you've installed all dependencies specified in your systems build instructions
 2. Follow the compile instructions for your system, run `./configure` with the `--enable-debug` flag
 3. Start Qt Creator. At the start page, do: `New` -> `Import Project` -> `Import Existing Project`
-4. Enter `bitcoinII-qt` as the Project Name and enter the absolute path to `src/qt` as Location
+4. Enter `bitcoincashII-qt` as the Project Name and enter the absolute path to `src/qt` as Location
 5. Check over the file selection, you may need to select the `forms` directory (necessary if you intend to edit *.ui files)
 6. Confirm the `Summary` page
 7. In the `Projects` tab, select `Manage Kits...`
@@ -119,6 +119,6 @@ sudo apt-get install qtcreator
  - Under `Compilers`: select `"GCC (x86 64bit in /usr/bin)"`
  - Under `Debuggers`: select `"GDB"` as debugger
 
-8. While in the `Projects` tab, ensure that you have the `bitcoinII-qt` executable specified under `Run`
- - If the executable is not specified: click `"Choose..."`, navigate to `src/qt`, and select `bitcoinII-qt`
+8. While in the `Projects` tab, ensure that you have the `bitcoincashII-qt` executable specified under `Run`
+ - If the executable is not specified: click `"Choose..."`, navigate to `src/qt`, and select `bitcoincashII-qt`
 9. You're all set! Start developing, building, and debugging the BitcoinII Core GUI

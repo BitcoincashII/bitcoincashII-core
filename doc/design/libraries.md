@@ -7,13 +7,13 @@
 | *libbitcoinII_consensus*   | Stable, backwards-compatible consensus functionality used by *libbitcoinII_node* and *libbitcoinII_wallet* and also exposed as a [shared library](../shared-libraries.md). |
 | *libbitcoinIIconsensus*    | Shared library build of static *libbitcoinII_consensus* library |
 | *libbitcoinII_kernel*      | Consensus engine and support library used for validation by *libbitcoinII_node* and also exposed as a [shared library](../shared-libraries.md). |
-| *libbitcoinIIqt*           | GUI functionality used by *bitcoinII-qt* and *bitcoinII-gui* executables |
-| *libbitcoinII_ipc*         | IPC functionality used by *bitcoinII-node*, *bitcoinII-wallet*, *bitcoinII-gui* executables to communicate when [`--enable-multiprocess`](multiprocess.md) is used. |
-| *libbitcoinII_node*        | P2P and RPC server functionality used by *bitcoinIId* and *bitcoinII-qt* executables. |
+| *libbitcoinIIqt*           | GUI functionality used by *bitcoincashII-qt* and *bitcoincashII-gui* executables |
+| *libbitcoinII_ipc*         | IPC functionality used by *bitcoinII-node*, *bitcoinII-wallet*, *bitcoincashII-gui* executables to communicate when [`--enable-multiprocess`](multiprocess.md) is used. |
+| *libbitcoinII_node*        | P2P and RPC server functionality used by *bitcoinIId* and *bitcoincashII-qt* executables. |
 | *libbitcoinII_util*        | Home for common functionality shared by different executables and libraries. Similar to *libbitcoinII_common*, but lower-level (see [Dependencies](#dependencies)). |
 | *libbitcoinII_wallet*      | Wallet functionality used by *bitcoinIId* and *bitcoinII-wallet* executables. |
 | *libbitcoinII_wallet_tool* | Lower-level wallet functionality used by *bitcoinII-wallet* executable. |
-| *libbitcoinII_zmq*         | [ZeroMQ](../zmq.md) functionality used by *bitcoinIId* and *bitcoinII-qt* executables. |
+| *libbitcoinII_zmq*         | [ZeroMQ](../zmq.md) functionality used by *bitcoinIId* and *bitcoincashII-qt* executables. |
 
 ## Conventions
 
@@ -44,9 +44,9 @@ bitcoinII-cli[bitcoinII-cli]-->libbitcoinII_cli;
 bitcoinIId[bitcoinIId]-->libbitcoinII_node;
 bitcoinIId[bitcoinIId]-->libbitcoinII_wallet;
 
-bitcoinII-qt[bitcoinII-qt]-->libbitcoinII_node;
-bitcoinII-qt[bitcoinII-qt]-->libbitcoinIIqt;
-bitcoinII-qt[bitcoinII-qt]-->libbitcoinII_wallet;
+bitcoincashII-qt[bitcoincashII-qt]-->libbitcoinII_node;
+bitcoincashII-qt[bitcoincashII-qt]-->libbitcoinIIqt;
+bitcoincashII-qt[bitcoincashII-qt]-->libbitcoinII_wallet;
 
 bitcoinII-wallet[bitcoinII-wallet]-->libbitcoinII_wallet;
 bitcoinII-wallet[bitcoinII-wallet]-->libbitcoinII_wallet_tool;
@@ -75,7 +75,7 @@ libbitcoinII_wallet_tool-->libbitcoinII_wallet;
 libbitcoinII_wallet_tool-->libbitcoinII_util;
 
 classDef bold stroke-width:2px, font-weight:bold, font-size: smaller;
-class bitcoinII-qt,bitcoinIId,bitcoinII-cli,bitcoinII-wallet bold
+class bitcoincashII-qt,bitcoinIId,bitcoinII-cli,bitcoinII-wallet bold
 ```
 </td></tr><tr><td>
 

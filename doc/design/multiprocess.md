@@ -31,7 +31,7 @@ The Bitcoin Core software has historically employed a monolithic architecture. T
 
 ## Current Architecture
 
-The current system features two primary executables: `bitcoinIId` and `bitcoinII-qt`. `bitcoinIId` combines a Bitcoin P2P node with an integrated JSON-RPC server, wallet, and indexes. `bitcoinII-qt` extends this by incorporating a Qt-based GUI. This monolithic structure, although robust, presents challenges such as limited operational flexibility and increased security risks due to the tight integration of components.
+The current system features two primary executables: `bitcoinIId` and `bitcoincashII-qt`. `bitcoinIId` combines a Bitcoin P2P node with an integrated JSON-RPC server, wallet, and indexes. `bitcoincashII-qt` extends this by incorporating a Qt-based GUI. This monolithic structure, although robust, presents challenges such as limited operational flexibility and increased security risks due to the tight integration of components.
 
 ## Proposed Architecture
 
@@ -39,7 +39,7 @@ The new architecture divides the existing code into three specialized executable
 
 - `bitcoinII-node`: Manages the P2P node, indexes, and JSON-RPC server.
 - `bitcoinII-wallet`: Handles all wallet functionality.
-- `bitcoinII-gui`: Provides a standalone Qt-based GUI.
+- `bitcoincashII-gui`: Provides a standalone Qt-based GUI.
 
 This modular approach is designed to enhance security through component isolation and improve usability by allowing independent operation of each module. This allows for new use-cases, such as running the node on a dedicated machine and operating wallets and GUIs on separate machines with the flexibility to start and stop them as needed.
 
@@ -51,7 +51,7 @@ This subdivision could be extended in the future. For example, indexes could be 
 flowchart LR
     node[bitcoinII-node] -- listens on --> socket["&lt;datadir&gt;/node.sock"]
     wallet[bitcoinII-wallet] -- connects to --> socket
-    gui[bitcoinII-gui] -- connects to --> socket
+    gui[bitcoincashII-gui] -- connects to --> socket
 ```
 
 </td></tr><tr><td>

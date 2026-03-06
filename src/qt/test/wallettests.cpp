@@ -266,9 +266,9 @@ public:
 //
 // This also requires overriding the default minimal Qt platform:
 //
-//     QT_QPA_PLATFORM=xcb     src/qt/test/test_bitcoinII-qt  # Linux
-//     QT_QPA_PLATFORM=windows src/qt/test/test_bitcoinII-qt  # Windows
-//     QT_QPA_PLATFORM=cocoa   src/qt/test/test_bitcoinII-qt  # macOS
+//     QT_QPA_PLATFORM=xcb     src/qt/test/test_bitcoincashII-qt  # Linux
+//     QT_QPA_PLATFORM=windows src/qt/test/test_bitcoincashII-qt  # Windows
+//     QT_QPA_PLATFORM=cocoa   src/qt/test/test_bitcoincashII-qt  # macOS
 void TestGUI(interfaces::Node& node, const std::shared_ptr<CWallet>& wallet)
 {
     // Create widgets for sending coins and listing transactions.
@@ -474,7 +474,7 @@ void WalletTests::walletTests()
         // and fails to handle returned nulls
         // (https://bugreports.qt.io/browse/QTBUG-49686).
         QWARN("Skipping WalletTests on mac build with 'minimal' platform set due to Qt bugs. To run AppTests, invoke "
-              "with 'QT_QPA_PLATFORM=cocoa test_bitcoinII-qt' on mac, or else use a linux or windows build.");
+              "with 'QT_QPA_PLATFORM=cocoa test_bitcoincashII-qt' on mac, or else use a linux or windows build.");
         return;
     }
 #endif

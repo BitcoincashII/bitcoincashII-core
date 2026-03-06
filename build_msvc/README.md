@@ -48,7 +48,7 @@ nmake install
 
 One could speed up building with [`jom`](https://wiki.qt.io/Jom), a replacement for `nmake` which makes use of all CPU cores.
 
-To build Bitcoin Core without Qt, unload or disable the `bitcoinII-qt`, `libbitcoinII_qt` and `test_bitcoinII-qt` projects.
+To build Bitcoin Core without Qt, unload or disable the `bitcoincashII-qt`, `libbitcoinII_qt` and `test_bitcoincashII-qt` projects.
 
 
 Building

@@ -5,10 +5,10 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-bin_PROGRAMS += qt/bitcoinII-qt
+bin_PROGRAMS += qt/bitcoincashII-qt
 
 if BUILD_BITCOINII_GUI
-  bin_PROGRAMS += bitcoinII-gui
+  bin_PROGRAMS += bitcoincashII-gui
 endif
 
 EXTRA_LIBRARIES += qt/libbitcoinIIqt.a
@@ -293,7 +293,7 @@ endif # ENABLE_WALLET
 
 QT_RES_ANIMATION = $(wildcard $(srcdir)/qt/res/animation/spinner-*.png)
 
-BITCOINII_QT_RC = qt/res/bitcoinII-qt-res.rc
+BITCOINII_QT_RC = qt/res/bitcoincashII-qt-res.rc
 
 BITCOINII_QT_INCLUDES = -DQT_NO_KEYWORDS -DQT_USE_QSTRINGBUILDER
 
@@ -316,43 +316,43 @@ QT_FORMS_H=$(join $(dir $(QT_FORMS_UI)),$(addprefix ui_, $(notdir $(QT_FORMS_UI:
 # Most files will depend on the forms and moc files as includes. Generate them
 # before anything else.
 $(QT_MOC): $(QT_FORMS_H)
-$(qt_libbitcoinIIqt_a_OBJECTS) $(qt_bitcoinII_qt_OBJECTS) $(bitcoinII_gui_OBJECTS) : | $(QT_MOC)
+$(qt_libbitcoinIIqt_a_OBJECTS) $(qt_bitcoincashII_qt_OBJECTS) $(bitcoincashII_gui_OBJECTS) : | $(QT_MOC)
 
-# bitcoinII-qt and bitcoinII-gui binaries #
-bitcoinII_qt_cppflags = $(AM_CPPFLAGS) $(BITCOINII_INCLUDES) $(BITCOINII_QT_INCLUDES) \
+# bitcoincashII-qt and bitcoincashII-gui binaries #
+bitcoincashII_qt_cppflags = $(AM_CPPFLAGS) $(BITCOINII_INCLUDES) $(BITCOINII_QT_INCLUDES) \
   $(QT_INCLUDES) $(QR_CFLAGS)
-bitcoinII_qt_cxxflags = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+bitcoincashII_qt_cxxflags = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 
-bitcoinII_qt_sources = qt/main.cpp
+bitcoincashII_qt_sources = qt/main.cpp
 if TARGET_WINDOWS
-  bitcoinII_qt_sources += $(BITCOINII_QT_RC)
+  bitcoincashII_qt_sources += $(BITCOINII_QT_RC)
 endif
-bitcoinII_qt_ldadd = qt/libbitcoinIIqt.a $(LIBBITCOINII_NODE)
+bitcoincashII_qt_ldadd = qt/libbitcoinIIqt.a $(LIBBITCOINII_NODE)
 if ENABLE_WALLET
-bitcoinII_qt_ldadd += $(LIBBITCOINII_UTIL) $(LIBBITCOINII_WALLET)
+bitcoincashII_qt_ldadd += $(LIBBITCOINII_UTIL) $(LIBBITCOINII_WALLET)
 endif
 if ENABLE_ZMQ
-bitcoinII_qt_ldadd += $(LIBBITCOINII_ZMQ) $(ZMQ_LIBS)
+bitcoincashII_qt_ldadd += $(LIBBITCOINII_ZMQ) $(ZMQ_LIBS)
 endif
-bitcoinII_qt_ldadd += $(LIBBITCOINII_CLI) $(LIBBITCOINII_COMMON) $(LIBBITCOINII_UTIL) $(LIBBITCOINII_CONSENSUS) $(LIBBITCOINII_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
+bitcoincashII_qt_ldadd += $(LIBBITCOINII_CLI) $(LIBBITCOINII_COMMON) $(LIBBITCOINII_UTIL) $(LIBBITCOINII_CONSENSUS) $(LIBBITCOINII_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
   $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(LIBSECP256K1) \
   $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(SQLITE_LIBS)
-bitcoinII_qt_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
-bitcoinII_qt_libtoolflags = $(AM_LIBTOOLFLAGS) --tag CXX
+bitcoincashII_qt_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+bitcoincashII_qt_libtoolflags = $(AM_LIBTOOLFLAGS) --tag CXX
 
-qt_bitcoinII_qt_CPPFLAGS = $(bitcoinII_qt_cppflags)
-qt_bitcoinII_qt_CXXFLAGS = $(bitcoinII_qt_cxxflags)
-qt_bitcoinII_qt_SOURCES = $(bitcoinII_qt_sources) init/bitcoinII-qt.cpp
-qt_bitcoinII_qt_LDADD = $(bitcoinII_qt_ldadd)
-qt_bitcoinII_qt_LDFLAGS = $(bitcoinII_qt_ldflags)
-qt_bitcoinII_qt_LIBTOOLFLAGS = $(bitcoinII_qt_libtoolflags)
+qt_bitcoincashII_qt_CPPFLAGS = $(bitcoincashII_qt_cppflags)
+qt_bitcoincashII_qt_CXXFLAGS = $(bitcoincashII_qt_cxxflags)
+qt_bitcoincashII_qt_SOURCES = $(bitcoincashII_qt_sources) init/bitcoincashII-qt.cpp
+qt_bitcoincashII_qt_LDADD = $(bitcoincashII_qt_ldadd)
+qt_bitcoincashII_qt_LDFLAGS = $(bitcoincashII_qt_ldflags)
+qt_bitcoincashII_qt_LIBTOOLFLAGS = $(bitcoincashII_qt_libtoolflags)
 
-bitcoinII_gui_CPPFLAGS = $(bitcoinII_qt_cppflags)
-bitcoinII_gui_CXXFLAGS = $(bitcoinII_qt_cxxflags)
-bitcoinII_gui_SOURCES = $(bitcoinII_qt_sources) init/bitcoinII-gui.cpp
-bitcoinII_gui_LDADD = $(bitcoinII_qt_ldadd) $(LIBBITCOINII_IPC) $(LIBBITCOINII_UTIL) $(LIBMULTIPROCESS_LIBS)
-bitcoinII_gui_LDFLAGS = $(bitcoinII_qt_ldflags)
-bitcoinII_gui_LIBTOOLFLAGS = $(bitcoinII_qt_libtoolflags)
+bitcoincashII_gui_CPPFLAGS = $(bitcoincashII_qt_cppflags)
+bitcoincashII_gui_CXXFLAGS = $(bitcoincashII_qt_cxxflags)
+bitcoincashII_gui_SOURCES = $(bitcoincashII_qt_sources) init/bitcoincashII-gui.cpp
+bitcoincashII_gui_LDADD = $(bitcoincashII_qt_ldadd) $(LIBBITCOINII_IPC) $(LIBBITCOINII_UTIL) $(LIBMULTIPROCESS_LIBS)
+bitcoincashII_gui_LDFLAGS = $(bitcoincashII_qt_ldflags)
+bitcoincashII_gui_LIBTOOLFLAGS = $(bitcoincashII_qt_libtoolflags)
 
 #locale/foo.ts -> locale/foo.qm
 QT_QM=$(QT_TS:.ts=.qm)
@@ -390,22 +390,22 @@ CLEAN_QT = $(nodist_qt_libbitcoinIIqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcd
 
 CLEANFILES += $(CLEAN_QT)
 
-bitcoinII_qt_clean: FORCE
-	rm -f $(CLEAN_QT) $(qt_libbitcoinIIqt_a_OBJECTS) $(qt_bitcoinII_qt_OBJECTS) qt/bitcoinII-qt$(EXEEXT) $(LIBBITCOINIIQT)
+bitcoincashII_qt_clean: FORCE
+	rm -f $(CLEAN_QT) $(qt_libbitcoinIIqt_a_OBJECTS) $(qt_bitcoincashII_qt_OBJECTS) qt/bitcoincashII-qt$(EXEEXT) $(LIBBITCOINIIQT)
 
-bitcoinII_qt : qt/bitcoinII-qt$(EXEEXT)
+bitcoincashII_qt : qt/bitcoincashII-qt$(EXEEXT)
 
 APK_LIB_DIR = qt/android/libs/$(ANDROID_ARCH)
 QT_BASE_VERSION = $(lastword $(shell $(MOC) --version))
 QT_BASE_PATH = $(shell find ../depends/sources/ -maxdepth 1 -type f -regex ".*qtbase.*$(QT_BASE_VERSION)\.tar.xz")
 QT_BASE_TLD = $(shell tar tf $(QT_BASE_PATH) --exclude='*/*')
 
-bitcoinII_qt_apk: FORCE
+bitcoincashII_qt_apk: FORCE
 	mkdir -p $(APK_LIB_DIR)
 	cp $(dir $(lastword $(CC)))../sysroot/usr/lib/$(host_alias)/libc++_shared.so $(APK_LIB_DIR)
 	tar xf $(QT_BASE_PATH) -C qt/android/src/ $(QT_BASE_TLD)src/android/jar/src --strip-components=5
 	tar xf $(QT_BASE_PATH) -C qt/android/src/ $(QT_BASE_TLD)src/android/java/src --strip-components=5
-	cp qt/bitcoinII-qt $(APK_LIB_DIR)/libbitcoinII-qt_$(ANDROID_ARCH).so
+	cp qt/bitcoincashII-qt $(APK_LIB_DIR)/libbitcoincashII-qt_$(ANDROID_ARCH).so
 	cd qt/android && gradle wrapper --gradle-version=6.6.1
 	cd qt/android && ./gradlew build
 

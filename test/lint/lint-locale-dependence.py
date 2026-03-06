@@ -3,7 +3,7 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
-# Be aware that bitcoinIId and bitcoinII-qt differ in terms of localization: Qt
+# Be aware that bitcoinIId and bitcoincashII-qt differ in terms of localization: Qt
 # opts in to POSIX localization by running setlocale(LC_ALL, "") on startup,
 # whereas no such call is made in bitcoinIId.
 #
@@ -16,12 +16,12 @@
 # thus ignored.
 #
 # This results in situations where bitcoinIId is guaranteed to be running
-# with the classic locale ("C") whereas the locale of bitcoinII-qt will vary
+# with the classic locale ("C") whereas the locale of bitcoincashII-qt will vary
 # depending on the user's environment variables.
 #
 # An example: Assuming the environment variable LC_ALL=de_DE then the
 # call std::to_string(1.23) will return "1.230000" in bitcoinIId but
-# "1,230000" in bitcoinII-qt.
+# "1,230000" in bitcoincashII-qt.
 #
 # From the Qt documentation:
 # "On Unix/Linux Qt is configured to use the system locale settings by default.

@@ -5,7 +5,7 @@ if BUILD_BITCOINIID
 endif
 
 if ENABLE_QT
-  dist_man1_MANS+=bitcoinII-qt.1
+  dist_man1_MANS+=bitcoincashII-qt.1
 endif
 
 if BUILD_BITCOINII_CLI

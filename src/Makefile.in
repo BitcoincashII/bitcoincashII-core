@@ -286,8 +286,8 @@ TESTS = $(am__EXEEXT_15) $(am__EXEEXT_18) $(am__EXEEXT_13)
 @ENABLE_BENCH_TRUE@@ENABLE_WALLET_TRUE@	bench/wallet_ismine.cpp
 @ENABLE_BENCH_TRUE@@ENABLE_WALLET_TRUE@am__append_74 = $(BDB_LIBS) $(SQLITE_LIBS)
 @ENABLE_BENCH_TRUE@am__append_75 = $(CLEAN_BITCOINII_BENCH)
-@ENABLE_QT_TRUE@am__append_76 = qt/bitcoinII-qt
-@BUILD_BITCOINII_GUI_TRUE@@ENABLE_QT_TRUE@am__append_77 = bitcoinII-gui
+@ENABLE_QT_TRUE@am__append_76 = qt/bitcoincashII-qt
+@BUILD_BITCOINII_GUI_TRUE@@ENABLE_QT_TRUE@am__append_77 = bitcoincashII-gui
 @ENABLE_QT_TRUE@am__append_78 = qt/libbitcoinIIqt.a
 @ENABLE_QT_TRUE@@TARGET_WINDOWS_TRUE@am__append_79 = $(BITCOINII_QT_WINDOWS_CPP)
 @ENABLE_QT_TRUE@@ENABLE_WALLET_TRUE@am__append_80 = $(BITCOINII_QT_WALLET_CPP)
@@ -296,8 +296,8 @@ TESTS = $(am__EXEEXT_15) $(am__EXEEXT_18) $(am__EXEEXT_13)
 @ENABLE_QT_TRUE@@ENABLE_WALLET_TRUE@am__append_83 = $(LIBBITCOINII_UTIL) $(LIBBITCOINII_WALLET)
 @ENABLE_QT_TRUE@@ENABLE_ZMQ_TRUE@am__append_84 = $(LIBBITCOINII_ZMQ) $(ZMQ_LIBS)
 @ENABLE_QT_TRUE@am__append_85 = $(CLEAN_QT)
-@ENABLE_QT_TESTS_TRUE@am__append_86 = qt/test/test_bitcoinII-qt
-@ENABLE_QT_TESTS_TRUE@am__append_87 = qt/test/test_bitcoinII-qt
+@ENABLE_QT_TESTS_TRUE@am__append_86 = qt/test/test_bitcoincashII-qt
+@ENABLE_QT_TESTS_TRUE@am__append_87 = qt/test/test_bitcoincashII-qt
 @ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@am__append_88 = \
 @ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@  qt/test/moc_addressbooktests.cpp \
 @ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@  qt/test/moc_wallettests.cpp
@@ -320,8 +320,8 @@ am__aclocal_m4_deps = $(top_srcdir)/build-aux/m4/ax_boost_base.m4 \
 	$(top_srcdir)/build-aux/m4/ax_cxx_compile_stdcxx.m4 \
 	$(top_srcdir)/build-aux/m4/ax_pthread.m4 \
 	$(top_srcdir)/build-aux/m4/bitcoinII_find_bdb48.m4 \
-	$(top_srcdir)/build-aux/m4/bitcoinII_qt.m4 \
 	$(top_srcdir)/build-aux/m4/bitcoinII_subdir_to_include.m4 \
+	$(top_srcdir)/build-aux/m4/bitcoincashII_qt.m4 \
 	$(top_srcdir)/build-aux/m4/l_atomic.m4 \
 	$(top_srcdir)/build-aux/m4/l_socket.m4 \
 	$(top_srcdir)/build-aux/m4/libtool.m4 \
@@ -348,10 +348,10 @@ CONFIG_CLEAN_VPATH_FILES = .bear-tidy-config .clang-tidy
 @BUILD_SEEDER_TRUE@am__EXEEXT_8 = bch2-seeder$(EXEEXT)
 @ENABLE_TESTS_TRUE@am__EXEEXT_9 = test/test_bitcoinII$(EXEEXT)
 @ENABLE_BENCH_TRUE@am__EXEEXT_10 = bench/bench_bitcoinII$(EXEEXT)
-@ENABLE_QT_TRUE@am__EXEEXT_11 = qt/bitcoinII-qt$(EXEEXT)
-@BUILD_BITCOINII_GUI_TRUE@@ENABLE_QT_TRUE@am__EXEEXT_12 = bitcoinII-gui$(EXEEXT)
+@ENABLE_QT_TRUE@am__EXEEXT_11 = qt/bitcoincashII-qt$(EXEEXT)
+@BUILD_BITCOINII_GUI_TRUE@@ENABLE_QT_TRUE@am__EXEEXT_12 = bitcoincashII-gui$(EXEEXT)
 @ENABLE_QT_TESTS_TRUE@am__EXEEXT_13 =  \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII-qt$(EXEEXT)
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII-qt$(EXEEXT)
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(includedir)"
 @ENABLE_FUZZ_FALSE@@ENABLE_TESTS_TRUE@am__EXEEXT_14 = minisketch/test$(EXEEXT)
@@ -1927,16 +1927,40 @@ bench_bench_bitcoinII_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(bench_bench_bitcoinII_CXXFLAGS) $(CXXFLAGS) \
 	$(bench_bench_bitcoinII_LDFLAGS) $(LDFLAGS) -o $@
-am__bitcoinII_gui_SOURCES_DIST = qt/main.cpp \
-	qt/res/bitcoinII-qt-res.rc init/bitcoinII-gui.cpp
-@ENABLE_QT_TRUE@am__objects_36 = qt/res/bitcoinII-qt-res.$(OBJEXT)
-@ENABLE_QT_TRUE@@TARGET_WINDOWS_TRUE@am__objects_37 =  \
-@ENABLE_QT_TRUE@@TARGET_WINDOWS_TRUE@	$(am__objects_36)
-@ENABLE_QT_TRUE@am__objects_38 = qt/bitcoinII_gui-main.$(OBJEXT) \
-@ENABLE_QT_TRUE@	$(am__objects_37)
-@ENABLE_QT_TRUE@am_bitcoinII_gui_OBJECTS = $(am__objects_38) \
-@ENABLE_QT_TRUE@	init/bitcoinII_gui-bitcoinII-gui.$(OBJEXT)
-bitcoinII_gui_OBJECTS = $(am_bitcoinII_gui_OBJECTS)
+am_bitcoincashII_chainstate_OBJECTS =  \
+	bitcoincashII_chainstate-bitcoinII-chainstate.$(OBJEXT)
+bitcoincashII_chainstate_OBJECTS =  \
+	$(am_bitcoincashII_chainstate_OBJECTS)
+bitcoincashII_chainstate_DEPENDENCIES = $(LIBBITCOINIIKERNEL) \
+	$(LIBSECP256K1)
+bitcoincashII_chainstate_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
+	$(bitcoincashII_chainstate_CXXFLAGS) $(CXXFLAGS) \
+	$(bitcoincashII_chainstate_LDFLAGS) $(LDFLAGS) -o $@
+am__bitcoincashII_cli_SOURCES_DIST = bitcoinII-cli.cpp \
+	bitcoinII-cli-res.rc
+@TARGET_WINDOWS_TRUE@am__objects_36 = bitcoinII-cli-res.$(OBJEXT)
+am_bitcoincashII_cli_OBJECTS =  \
+	bitcoincashII_cli-bitcoinII-cli.$(OBJEXT) $(am__objects_36)
+bitcoincashII_cli_OBJECTS = $(am_bitcoincashII_cli_OBJECTS)
+bitcoincashII_cli_DEPENDENCIES = $(LIBBITCOINII_CLI) $(LIBUNIVALUE) \
+	$(LIBBITCOINII_COMMON) $(LIBBITCOINII_UTIL) \
+	$(LIBBITCOINII_CRYPTO) $(am__DEPENDENCIES_1)
+bitcoincashII_cli_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
+	$(bitcoincashII_cli_CXXFLAGS) $(CXXFLAGS) \
+	$(bitcoincashII_cli_LDFLAGS) $(LDFLAGS) -o $@
+am__bitcoincashII_gui_SOURCES_DIST = qt/main.cpp \
+	qt/res/bitcoincashII-qt-res.rc init/bitcoincashII-gui.cpp
+@ENABLE_QT_TRUE@am__objects_37 =  \
+@ENABLE_QT_TRUE@	qt/res/bitcoincashII-qt-res.$(OBJEXT)
+@ENABLE_QT_TRUE@@TARGET_WINDOWS_TRUE@am__objects_38 =  \
+@ENABLE_QT_TRUE@@TARGET_WINDOWS_TRUE@	$(am__objects_37)
+@ENABLE_QT_TRUE@am__objects_39 = qt/bitcoincashII_gui-main.$(OBJEXT) \
+@ENABLE_QT_TRUE@	$(am__objects_38)
+@ENABLE_QT_TRUE@am_bitcoincashII_gui_OBJECTS = $(am__objects_39) \
+@ENABLE_QT_TRUE@	init/bitcoincashII_gui-bitcoincashII-gui.$(OBJEXT)
+bitcoincashII_gui_OBJECTS = $(am_bitcoincashII_gui_OBJECTS)
 @ENABLE_QT_TRUE@@ENABLE_ZMQ_TRUE@am__DEPENDENCIES_4 =  \
 @ENABLE_QT_TRUE@@ENABLE_ZMQ_TRUE@	$(LIBBITCOINII_ZMQ) \
 @ENABLE_QT_TRUE@@ENABLE_ZMQ_TRUE@	$(am__DEPENDENCIES_1)
@@ -1952,36 +1976,13 @@ bitcoinII_gui_OBJECTS = $(am_bitcoinII_gui_OBJECTS)
 @ENABLE_QT_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 @ENABLE_QT_TRUE@	$(LIBSECP256K1) $(am__DEPENDENCIES_1) \
 @ENABLE_QT_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-@ENABLE_QT_TRUE@bitcoinII_gui_DEPENDENCIES = $(am__DEPENDENCIES_5) \
-@ENABLE_QT_TRUE@	$(LIBBITCOINII_IPC) $(LIBBITCOINII_UTIL) \
-@ENABLE_QT_TRUE@	$(am__DEPENDENCIES_1)
-bitcoinII_gui_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(bitcoinII_gui_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
-	$(CXXLD) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) \
-	$(bitcoinII_gui_LDFLAGS) $(LDFLAGS) -o $@
-am_bitcoincashII_chainstate_OBJECTS =  \
-	bitcoincashII_chainstate-bitcoinII-chainstate.$(OBJEXT)
-bitcoincashII_chainstate_OBJECTS =  \
-	$(am_bitcoincashII_chainstate_OBJECTS)
-bitcoincashII_chainstate_DEPENDENCIES = $(LIBBITCOINIIKERNEL) \
-	$(LIBSECP256K1)
-bitcoincashII_chainstate_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(bitcoincashII_chainstate_CXXFLAGS) $(CXXFLAGS) \
-	$(bitcoincashII_chainstate_LDFLAGS) $(LDFLAGS) -o $@
-am__bitcoincashII_cli_SOURCES_DIST = bitcoinII-cli.cpp \
-	bitcoinII-cli-res.rc
-@TARGET_WINDOWS_TRUE@am__objects_39 = bitcoinII-cli-res.$(OBJEXT)
-am_bitcoincashII_cli_OBJECTS =  \
-	bitcoincashII_cli-bitcoinII-cli.$(OBJEXT) $(am__objects_39)
-bitcoincashII_cli_OBJECTS = $(am_bitcoincashII_cli_OBJECTS)
-bitcoincashII_cli_DEPENDENCIES = $(LIBBITCOINII_CLI) $(LIBUNIVALUE) \
-	$(LIBBITCOINII_COMMON) $(LIBBITCOINII_UTIL) \
-	$(LIBBITCOINII_CRYPTO) $(am__DEPENDENCIES_1)
-bitcoincashII_cli_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(bitcoincashII_cli_CXXFLAGS) $(CXXFLAGS) \
-	$(bitcoincashII_cli_LDFLAGS) $(LDFLAGS) -o $@
+@ENABLE_QT_TRUE@bitcoincashII_gui_DEPENDENCIES =  \
+@ENABLE_QT_TRUE@	$(am__DEPENDENCIES_5) $(LIBBITCOINII_IPC) \
+@ENABLE_QT_TRUE@	$(LIBBITCOINII_UTIL) $(am__DEPENDENCIES_1)
+bitcoincashII_gui_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(bitcoincashII_gui_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
+	$(CXXLD) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) \
+	$(bitcoincashII_gui_LDFLAGS) $(LDFLAGS) -o $@
 am__bitcoincashII_node_SOURCES_DIST = bitcoinIId.cpp bitcoinIId-res.rc \
 	init/bitcoinII-node.cpp
 @TARGET_WINDOWS_TRUE@am__objects_40 = bitcoinIId-res.$(OBJEXT)
@@ -2070,54 +2071,55 @@ minisketch_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(minisketch_test_CXXFLAGS) $(CXXFLAGS) \
 	$(minisketch_test_LDFLAGS) $(LDFLAGS) -o $@
-am__qt_bitcoinII_qt_SOURCES_DIST = qt/main.cpp \
-	qt/res/bitcoinII-qt-res.rc init/bitcoinII-qt.cpp
-@ENABLE_QT_TRUE@am__objects_47 = qt/bitcoinII_qt-main.$(OBJEXT) \
-@ENABLE_QT_TRUE@	$(am__objects_37)
-@ENABLE_QT_TRUE@am_qt_bitcoinII_qt_OBJECTS = $(am__objects_47) \
-@ENABLE_QT_TRUE@	init/qt_bitcoinII_qt-bitcoinII-qt.$(OBJEXT)
-qt_bitcoinII_qt_OBJECTS = $(am_qt_bitcoinII_qt_OBJECTS)
-@ENABLE_QT_TRUE@qt_bitcoinII_qt_DEPENDENCIES = $(am__DEPENDENCIES_5)
-qt_bitcoinII_qt_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(qt_bitcoinII_qt_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
-	$(CXXLD) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) \
-	$(qt_bitcoinII_qt_LDFLAGS) $(LDFLAGS) -o $@
-am__qt_test_test_bitcoinII_qt_SOURCES_DIST = init/bitcoinII-qt.cpp \
-	qt/test/apptests.cpp qt/test/optiontests.cpp \
-	qt/test/rpcnestedtests.cpp qt/test/test_main.cpp \
-	qt/test/uritests.cpp qt/test/util.cpp \
+am__qt_bitcoincashII_qt_SOURCES_DIST = qt/main.cpp \
+	qt/res/bitcoincashII-qt-res.rc init/bitcoincashII-qt.cpp
+@ENABLE_QT_TRUE@am__objects_47 = qt/bitcoincashII_qt-main.$(OBJEXT) \
+@ENABLE_QT_TRUE@	$(am__objects_38)
+@ENABLE_QT_TRUE@am_qt_bitcoincashII_qt_OBJECTS = $(am__objects_47) \
+@ENABLE_QT_TRUE@	init/qt_bitcoincashII_qt-bitcoincashII-qt.$(OBJEXT)
+qt_bitcoincashII_qt_OBJECTS = $(am_qt_bitcoincashII_qt_OBJECTS)
+@ENABLE_QT_TRUE@qt_bitcoincashII_qt_DEPENDENCIES =  \
+@ENABLE_QT_TRUE@	$(am__DEPENDENCIES_5)
+qt_bitcoincashII_qt_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+	$(qt_bitcoincashII_qt_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CXXLD) $(qt_bitcoincashII_qt_CXXFLAGS) \
+	$(CXXFLAGS) $(qt_bitcoincashII_qt_LDFLAGS) $(LDFLAGS) -o $@
+am__qt_test_test_bitcoincashII_qt_SOURCES_DIST =  \
+	init/bitcoincashII-qt.cpp qt/test/apptests.cpp \
+	qt/test/optiontests.cpp qt/test/rpcnestedtests.cpp \
+	qt/test/test_main.cpp qt/test/uritests.cpp qt/test/util.cpp \
 	qt/test/addressbooktests.h qt/test/apptests.h \
 	qt/test/optiontests.h qt/test/rpcnestedtests.h \
 	qt/test/uritests.h qt/test/util.h qt/test/wallettests.h \
 	qt/test/addressbooktests.cpp qt/test/wallettests.cpp \
 	wallet/test/wallet_test_fixture.cpp
-@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@am__objects_48 = qt/test/test_bitcoinII_qt-addressbooktests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@	qt/test/test_bitcoinII_qt-wallettests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@	wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.$(OBJEXT)
-@ENABLE_QT_TESTS_TRUE@am_qt_test_test_bitcoinII_qt_OBJECTS = init/qt_test_test_bitcoinII_qt-bitcoinII-qt.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-apptests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-optiontests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-rpcnestedtests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-test_main.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-uritests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-util.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@am__objects_48 = qt/test/test_bitcoincashII_qt-addressbooktests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@	qt/test/test_bitcoincashII_qt-wallettests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@	wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.$(OBJEXT)
+@ENABLE_QT_TESTS_TRUE@am_qt_test_test_bitcoincashII_qt_OBJECTS = init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-apptests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-optiontests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-rpcnestedtests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-test_main.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-uritests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-util.$(OBJEXT) \
 @ENABLE_QT_TESTS_TRUE@	$(am__objects_1) $(am__objects_48)
-@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@am__objects_49 = qt/test/test_bitcoinII_qt-moc_addressbooktests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@	qt/test/test_bitcoinII_qt-moc_wallettests.$(OBJEXT)
-@ENABLE_QT_TESTS_TRUE@am__objects_50 = qt/test/test_bitcoinII_qt-moc_apptests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-moc_optiontests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-moc_rpcnestedtests.$(OBJEXT) \
-@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoinII_qt-moc_uritests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@am__objects_49 = qt/test/test_bitcoincashII_qt-moc_addressbooktests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@@ENABLE_WALLET_TRUE@	qt/test/test_bitcoincashII_qt-moc_wallettests.$(OBJEXT)
+@ENABLE_QT_TESTS_TRUE@am__objects_50 = qt/test/test_bitcoincashII_qt-moc_apptests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-moc_optiontests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.$(OBJEXT) \
+@ENABLE_QT_TESTS_TRUE@	qt/test/test_bitcoincashII_qt-moc_uritests.$(OBJEXT) \
 @ENABLE_QT_TESTS_TRUE@	$(am__objects_49)
-@ENABLE_QT_TESTS_TRUE@nodist_qt_test_test_bitcoinII_qt_OBJECTS =  \
+@ENABLE_QT_TESTS_TRUE@nodist_qt_test_test_bitcoincashII_qt_OBJECTS =  \
 @ENABLE_QT_TESTS_TRUE@	$(am__objects_50)
-qt_test_test_bitcoinII_qt_OBJECTS =  \
-	$(am_qt_test_test_bitcoinII_qt_OBJECTS) \
-	$(nodist_qt_test_test_bitcoinII_qt_OBJECTS)
+qt_test_test_bitcoincashII_qt_OBJECTS =  \
+	$(am_qt_test_test_bitcoincashII_qt_OBJECTS) \
+	$(nodist_qt_test_test_bitcoincashII_qt_OBJECTS)
 @ENABLE_QT_TESTS_TRUE@@ENABLE_ZMQ_TRUE@am__DEPENDENCIES_7 =  \
 @ENABLE_QT_TESTS_TRUE@@ENABLE_ZMQ_TRUE@	$(LIBBITCOINII_ZMQ) \
 @ENABLE_QT_TESTS_TRUE@@ENABLE_ZMQ_TRUE@	$(am__DEPENDENCIES_1)
-@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoinII_qt_DEPENDENCIES =  \
+@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoincashII_qt_DEPENDENCIES =  \
 @ENABLE_QT_TESTS_TRUE@	$(LIBBITCOINIIQT) $(LIBBITCOINII_NODE) \
 @ENABLE_QT_TESTS_TRUE@	$(LIBTEST_UTIL) $(am__append_90) \
 @ENABLE_QT_TESTS_TRUE@	$(am__DEPENDENCIES_7) \
@@ -2137,10 +2139,10 @@ qt_test_test_bitcoinII_qt_OBJECTS =  \
 @ENABLE_QT_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
 @ENABLE_QT_TESTS_TRUE@	$(am__DEPENDENCIES_1) \
 @ENABLE_QT_TESTS_TRUE@	$(am__DEPENDENCIES_1)
-qt_test_test_bitcoinII_qt_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
+qt_test_test_bitcoincashII_qt_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) \
-	$(qt_test_test_bitcoinII_qt_LDFLAGS) $(LDFLAGS) -o $@
+	$(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) \
+	$(qt_test_test_bitcoincashII_qt_LDFLAGS) $(LDFLAGS) -o $@
 am__test_fuzz_fuzz_SOURCES_DIST = wallet/test/fuzz/coincontrol.cpp \
 	wallet/test/fuzz/coinselection.cpp wallet/test/fuzz/fees.cpp \
 	wallet/test/fuzz/parse_iso8601.cpp \
@@ -2889,13 +2891,13 @@ am__depfiles_remade =  \
 	index/$(DEPDIR)/libbitcoinII_node_a-blockfilterindex.Po \
 	index/$(DEPDIR)/libbitcoinII_node_a-coinstatsindex.Po \
 	index/$(DEPDIR)/libbitcoinII_node_a-txindex.Po \
-	init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Po \
+	init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Po \
 	init/$(DEPDIR)/bitcoincashII_node-bitcoinII-node.Po \
 	init/$(DEPDIR)/bitcoincashII_wallet-bitcoinII-wallet.Po \
 	init/$(DEPDIR)/bitcoincashIId-bitcoinIId.Po \
 	init/$(DEPDIR)/libbitcoinII_common_a-common.Po \
-	init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Po \
-	init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Po \
+	init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Po \
+	init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Po \
 	ipc/$(DEPDIR)/libbitcoinII_ipc_a-interfaces.Po \
 	ipc/$(DEPDIR)/libbitcoinII_ipc_a-process.Po \
 	ipc/capnp/$(DEPDIR)/libbitcoinII_ipc_a-echo.capnp.Po \
@@ -3036,8 +3038,8 @@ am__depfiles_remade =  \
 	primitives/$(DEPDIR)/libbitcoinIIconsensus_la-transaction.Plo \
 	primitives/$(DEPDIR)/libbitcoinIIkernel_la-block.Plo \
 	primitives/$(DEPDIR)/libbitcoinIIkernel_la-transaction.Plo \
-	qt/$(DEPDIR)/bitcoinII_gui-main.Po \
-	qt/$(DEPDIR)/bitcoinII_qt-main.Po \
+	qt/$(DEPDIR)/bitcoincashII_gui-main.Po \
+	qt/$(DEPDIR)/bitcoincashII_qt-main.Po \
 	qt/$(DEPDIR)/libbitcoinIIqt_a-addressbookpage.Po \
 	qt/$(DEPDIR)/libbitcoinIIqt_a-addresstablemodel.Po \
 	qt/$(DEPDIR)/libbitcoinIIqt_a-askpassphrasedialog.Po \
@@ -3152,20 +3154,20 @@ am__depfiles_remade =  \
 	qt/$(DEPDIR)/libbitcoinIIqt_a-walletmodeltransaction.Po \
 	qt/$(DEPDIR)/libbitcoinIIqt_a-walletview.Po \
 	qt/$(DEPDIR)/libbitcoinIIqt_a-winshutdownmonitor.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Po \
-	qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Po \
+	qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Po \
 	rpc/$(DEPDIR)/libbitcoinII_cli_a-client.Po \
 	rpc/$(DEPDIR)/libbitcoinII_common_a-external_signer.Po \
 	rpc/$(DEPDIR)/libbitcoinII_common_a-rawtransaction_util.Po \
@@ -3582,7 +3584,7 @@ am__depfiles_remade =  \
 	wallet/rpc/$(DEPDIR)/libbitcoinII_wallet_a-util.Po \
 	wallet/rpc/$(DEPDIR)/libbitcoinII_wallet_a-wallet.Po \
 	wallet/test/$(DEPDIR)/libtest_util_a-util.Po \
-	wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Po \
+	wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Po \
 	wallet/test/$(DEPDIR)/test_test_bitcoinII-coinselector_tests.Po \
 	wallet/test/$(DEPDIR)/test_test_bitcoinII-db_tests.Po \
 	wallet/test/$(DEPDIR)/test_test_bitcoinII-feebumper_tests.Po \
@@ -3700,13 +3702,14 @@ SOURCES = $(libbitcoinII_cli_a_SOURCES) \
 	$(libbitcoinIIkernel_la_SOURCES) $(libunivalue_la_SOURCES) \
 	$(bch2_seeder_SOURCES) $(bench_bench_bitcoinII_SOURCES) \
 	$(nodist_bench_bench_bitcoinII_SOURCES) \
-	$(bitcoinII_gui_SOURCES) $(bitcoincashII_chainstate_SOURCES) \
-	$(bitcoincashII_cli_SOURCES) $(bitcoincashII_node_SOURCES) \
-	$(bitcoincashII_tx_SOURCES) $(bitcoincashII_util_SOURCES) \
-	$(bitcoincashII_wallet_SOURCES) $(bitcoincashIId_SOURCES) \
-	$(minisketch_test_SOURCES) $(qt_bitcoinII_qt_SOURCES) \
-	$(qt_test_test_bitcoinII_qt_SOURCES) \
-	$(nodist_qt_test_test_bitcoinII_qt_SOURCES) \
+	$(bitcoincashII_chainstate_SOURCES) \
+	$(bitcoincashII_cli_SOURCES) $(bitcoincashII_gui_SOURCES) \
+	$(bitcoincashII_node_SOURCES) $(bitcoincashII_tx_SOURCES) \
+	$(bitcoincashII_util_SOURCES) $(bitcoincashII_wallet_SOURCES) \
+	$(bitcoincashIId_SOURCES) $(minisketch_test_SOURCES) \
+	$(qt_bitcoincashII_qt_SOURCES) \
+	$(qt_test_test_bitcoincashII_qt_SOURCES) \
+	$(nodist_qt_test_test_bitcoincashII_qt_SOURCES) \
 	$(test_fuzz_fuzz_SOURCES) $(test_test_bitcoinII_SOURCES) \
 	$(nodist_test_test_bitcoinII_SOURCES) \
 	$(univalue_test_object_SOURCES) \
@@ -3741,17 +3744,17 @@ DIST_SOURCES = $(libbitcoinII_cli_a_SOURCES) \
 	$(am__libbitcoinIIkernel_la_SOURCES_DIST) \
 	$(libunivalue_la_SOURCES) $(bch2_seeder_SOURCES) \
 	$(am__bench_bench_bitcoinII_SOURCES_DIST) \
-	$(am__bitcoinII_gui_SOURCES_DIST) \
 	$(bitcoincashII_chainstate_SOURCES) \
 	$(am__bitcoincashII_cli_SOURCES_DIST) \
+	$(am__bitcoincashII_gui_SOURCES_DIST) \
 	$(am__bitcoincashII_node_SOURCES_DIST) \
 	$(am__bitcoincashII_tx_SOURCES_DIST) \
 	$(am__bitcoincashII_util_SOURCES_DIST) \
 	$(am__bitcoincashII_wallet_SOURCES_DIST) \
 	$(am__bitcoincashIId_SOURCES_DIST) \
 	$(am__minisketch_test_SOURCES_DIST) \
-	$(am__qt_bitcoinII_qt_SOURCES_DIST) \
-	$(am__qt_test_test_bitcoinII_qt_SOURCES_DIST) \
+	$(am__qt_bitcoincashII_qt_SOURCES_DIST) \
+	$(am__qt_test_test_bitcoincashII_qt_SOURCES_DIST) \
 	$(am__test_fuzz_fuzz_SOURCES_DIST) \
 	$(am__test_test_bitcoinII_SOURCES_DIST) \
 	$(am__univalue_test_object_SOURCES_DIST) \
@@ -6110,7 +6113,7 @@ CLEAN_BITCOINII_TEST = test/*.gcda test/*.gcno test/fuzz/*.gcda test/fuzz/*.gcno
 @ENABLE_QT_TRUE@BITCOINII_QT_CPP = $(BITCOINII_QT_BASE_CPP) \
 @ENABLE_QT_TRUE@	$(am__append_79) $(am__append_80)
 @ENABLE_QT_TRUE@QT_RES_ANIMATION = $(wildcard $(srcdir)/qt/res/animation/spinner-*.png)
-@ENABLE_QT_TRUE@BITCOINII_QT_RC = qt/res/bitcoinII-qt-res.rc
+@ENABLE_QT_TRUE@BITCOINII_QT_RC = qt/res/bitcoincashII-qt-res.rc
 @ENABLE_QT_TRUE@BITCOINII_QT_INCLUDES = -DQT_NO_KEYWORDS -DQT_USE_QSTRINGBUILDER
 @ENABLE_QT_TRUE@qt_libbitcoinIIqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOINII_INCLUDES) $(BITCOINII_QT_INCLUDES) \
 @ENABLE_QT_TRUE@  $(QT_INCLUDES) $(QT_DBUS_INCLUDES) $(QR_CFLAGS) $(BOOST_CPPFLAGS)
@@ -6127,13 +6130,14 @@ CLEAN_BITCOINII_TEST = test/*.gcda test/*.gcno test/fuzz/*.gcda test/fuzz/*.gcno
 # forms/foo.h -> forms/ui_foo.h
 @ENABLE_QT_TRUE@QT_FORMS_H = $(join $(dir $(QT_FORMS_UI)),$(addprefix ui_, $(notdir $(QT_FORMS_UI:.ui=.h))))
 
-# bitcoinII-qt and bitcoinII-gui binaries #
-@ENABLE_QT_TRUE@bitcoinII_qt_cppflags = $(AM_CPPFLAGS) $(BITCOINII_INCLUDES) $(BITCOINII_QT_INCLUDES) \
+# bitcoincashII-qt and bitcoincashII-gui binaries #
+@ENABLE_QT_TRUE@bitcoincashII_qt_cppflags = $(AM_CPPFLAGS) $(BITCOINII_INCLUDES) $(BITCOINII_QT_INCLUDES) \
 @ENABLE_QT_TRUE@  $(QT_INCLUDES) $(QR_CFLAGS)
 
-@ENABLE_QT_TRUE@bitcoinII_qt_cxxflags = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
-@ENABLE_QT_TRUE@bitcoinII_qt_sources = qt/main.cpp $(am__append_82)
-@ENABLE_QT_TRUE@bitcoinII_qt_ldadd = qt/libbitcoinIIqt.a \
+@ENABLE_QT_TRUE@bitcoincashII_qt_cxxflags = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+@ENABLE_QT_TRUE@bitcoincashII_qt_sources = qt/main.cpp \
+@ENABLE_QT_TRUE@	$(am__append_82)
+@ENABLE_QT_TRUE@bitcoincashII_qt_ldadd = qt/libbitcoinIIqt.a \
 @ENABLE_QT_TRUE@	$(LIBBITCOINII_NODE) $(am__append_83) \
 @ENABLE_QT_TRUE@	$(am__append_84) $(LIBBITCOINII_CLI) \
 @ENABLE_QT_TRUE@	$(LIBBITCOINII_COMMON) $(LIBBITCOINII_UTIL) \
@@ -6144,20 +6148,20 @@ CLEAN_BITCOINII_TEST = test/*.gcda test/*.gcno test/fuzz/*.gcda test/fuzz/*.gcno
 @ENABLE_QT_TRUE@	$(MINIUPNPC_LIBS) $(NATPMP_LIBS) \
 @ENABLE_QT_TRUE@	$(LIBSECP256K1) $(EVENT_PTHREADS_LIBS) \
 @ENABLE_QT_TRUE@	$(EVENT_LIBS) $(SQLITE_LIBS)
-@ENABLE_QT_TRUE@bitcoinII_qt_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
-@ENABLE_QT_TRUE@bitcoinII_qt_libtoolflags = $(AM_LIBTOOLFLAGS) --tag CXX
-@ENABLE_QT_TRUE@qt_bitcoinII_qt_CPPFLAGS = $(bitcoinII_qt_cppflags)
-@ENABLE_QT_TRUE@qt_bitcoinII_qt_CXXFLAGS = $(bitcoinII_qt_cxxflags)
-@ENABLE_QT_TRUE@qt_bitcoinII_qt_SOURCES = $(bitcoinII_qt_sources) init/bitcoinII-qt.cpp
-@ENABLE_QT_TRUE@qt_bitcoinII_qt_LDADD = $(bitcoinII_qt_ldadd)
-@ENABLE_QT_TRUE@qt_bitcoinII_qt_LDFLAGS = $(bitcoinII_qt_ldflags)
-@ENABLE_QT_TRUE@qt_bitcoinII_qt_LIBTOOLFLAGS = $(bitcoinII_qt_libtoolflags)
-@ENABLE_QT_TRUE@bitcoinII_gui_CPPFLAGS = $(bitcoinII_qt_cppflags)
-@ENABLE_QT_TRUE@bitcoinII_gui_CXXFLAGS = $(bitcoinII_qt_cxxflags)
-@ENABLE_QT_TRUE@bitcoinII_gui_SOURCES = $(bitcoinII_qt_sources) init/bitcoinII-gui.cpp
-@ENABLE_QT_TRUE@bitcoinII_gui_LDADD = $(bitcoinII_qt_ldadd) $(LIBBITCOINII_IPC) $(LIBBITCOINII_UTIL) $(LIBMULTIPROCESS_LIBS)
-@ENABLE_QT_TRUE@bitcoinII_gui_LDFLAGS = $(bitcoinII_qt_ldflags)
-@ENABLE_QT_TRUE@bitcoinII_gui_LIBTOOLFLAGS = $(bitcoinII_qt_libtoolflags)
+@ENABLE_QT_TRUE@bitcoincashII_qt_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+@ENABLE_QT_TRUE@bitcoincashII_qt_libtoolflags = $(AM_LIBTOOLFLAGS) --tag CXX
+@ENABLE_QT_TRUE@qt_bitcoincashII_qt_CPPFLAGS = $(bitcoincashII_qt_cppflags)
+@ENABLE_QT_TRUE@qt_bitcoincashII_qt_CXXFLAGS = $(bitcoincashII_qt_cxxflags)
+@ENABLE_QT_TRUE@qt_bitcoincashII_qt_SOURCES = $(bitcoincashII_qt_sources) init/bitcoincashII-qt.cpp
+@ENABLE_QT_TRUE@qt_bitcoincashII_qt_LDADD = $(bitcoincashII_qt_ldadd)
+@ENABLE_QT_TRUE@qt_bitcoincashII_qt_LDFLAGS = $(bitcoincashII_qt_ldflags)
+@ENABLE_QT_TRUE@qt_bitcoincashII_qt_LIBTOOLFLAGS = $(bitcoincashII_qt_libtoolflags)
+@ENABLE_QT_TRUE@bitcoincashII_gui_CPPFLAGS = $(bitcoincashII_qt_cppflags)
+@ENABLE_QT_TRUE@bitcoincashII_gui_CXXFLAGS = $(bitcoincashII_qt_cxxflags)
+@ENABLE_QT_TRUE@bitcoincashII_gui_SOURCES = $(bitcoincashII_qt_sources) init/bitcoincashII-gui.cpp
+@ENABLE_QT_TRUE@bitcoincashII_gui_LDADD = $(bitcoincashII_qt_ldadd) $(LIBBITCOINII_IPC) $(LIBBITCOINII_UTIL) $(LIBMULTIPROCESS_LIBS)
+@ENABLE_QT_TRUE@bitcoincashII_gui_LDFLAGS = $(bitcoincashII_qt_ldflags)
+@ENABLE_QT_TRUE@bitcoincashII_gui_LIBTOOLFLAGS = $(bitcoincashII_qt_libtoolflags)
 
 #locale/foo.ts -> locale/foo.qm
 @ENABLE_QT_TRUE@QT_QM = $(QT_TS:.ts=.qm)
@@ -6180,19 +6184,19 @@ CLEAN_BITCOINII_TEST = test/*.gcda test/*.gcno test/fuzz/*.gcda test/fuzz/*.gcno
 @ENABLE_QT_TESTS_TRUE@  qt/test/util.h \
 @ENABLE_QT_TESTS_TRUE@  qt/test/wallettests.h
 
-@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoinII_qt_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOINII_INCLUDES) $(BITCOINII_QT_INCLUDES) \
+@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoincashII_qt_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOINII_INCLUDES) $(BITCOINII_QT_INCLUDES) \
 @ENABLE_QT_TESTS_TRUE@  $(QT_INCLUDES) $(QT_TEST_INCLUDES) $(BOOST_CPPFLAGS)
 
-@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoinII_qt_SOURCES =  \
-@ENABLE_QT_TESTS_TRUE@	init/bitcoinII-qt.cpp \
+@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoincashII_qt_SOURCES =  \
+@ENABLE_QT_TESTS_TRUE@	init/bitcoincashII-qt.cpp \
 @ENABLE_QT_TESTS_TRUE@	qt/test/apptests.cpp \
 @ENABLE_QT_TESTS_TRUE@	qt/test/optiontests.cpp \
 @ENABLE_QT_TESTS_TRUE@	qt/test/rpcnestedtests.cpp \
 @ENABLE_QT_TESTS_TRUE@	qt/test/test_main.cpp \
 @ENABLE_QT_TESTS_TRUE@	qt/test/uritests.cpp qt/test/util.cpp \
 @ENABLE_QT_TESTS_TRUE@	$(TEST_QT_H) $(am__append_89)
-@ENABLE_QT_TESTS_TRUE@nodist_qt_test_test_bitcoinII_qt_SOURCES = $(TEST_QT_MOC_CPP)
-@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoinII_qt_LDADD =  \
+@ENABLE_QT_TESTS_TRUE@nodist_qt_test_test_bitcoincashII_qt_SOURCES = $(TEST_QT_MOC_CPP)
+@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoincashII_qt_LDADD =  \
 @ENABLE_QT_TESTS_TRUE@	$(LIBBITCOINIIQT) $(LIBBITCOINII_NODE) \
 @ENABLE_QT_TESTS_TRUE@	$(LIBTEST_UTIL) $(am__append_90) \
 @ENABLE_QT_TESTS_TRUE@	$(am__append_91) $(LIBBITCOINII_CLI) \
@@ -6206,8 +6210,8 @@ CLEAN_BITCOINII_TEST = test/*.gcda test/*.gcno test/fuzz/*.gcda test/fuzz/*.gcno
 @ENABLE_QT_TESTS_TRUE@	$(NATPMP_LIBS) $(LIBSECP256K1) \
 @ENABLE_QT_TESTS_TRUE@	$(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) \
 @ENABLE_QT_TESTS_TRUE@	$(SQLITE_LIBS)
-@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoinII_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
-@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoinII_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
+@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoincashII_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+@ENABLE_QT_TESTS_TRUE@qt_test_test_bitcoincashII_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 @ENABLE_QT_TESTS_TRUE@CLEAN_BITCOINII_QT_TEST = $(TEST_QT_MOC_CPP) qt/test/*.gcda qt/test/*.gcno
 UNIVALUE_INCLUDE_DIR_INT = univalue/include
 UNIVALUE_DIST_HEADERS_INT = univalue/include/univalue.h \
@@ -7889,22 +7893,6 @@ bench/bench_bitcoinII-wallet_ismine.$(OBJEXT): bench/$(am__dirstamp) \
 bench/bench_bitcoinII$(EXEEXT): $(bench_bench_bitcoinII_OBJECTS) $(bench_bench_bitcoinII_DEPENDENCIES) $(EXTRA_bench_bench_bitcoinII_DEPENDENCIES) bench/$(am__dirstamp)
 	@rm -f bench/bench_bitcoinII$(EXEEXT)
 	$(AM_V_CXXLD)$(bench_bench_bitcoinII_LINK) $(bench_bench_bitcoinII_OBJECTS) $(bench_bench_bitcoinII_LDADD) $(LIBS)
-qt/bitcoinII_gui-main.$(OBJEXT): qt/$(am__dirstamp) \
-	qt/$(DEPDIR)/$(am__dirstamp)
-qt/res/$(am__dirstamp):
-	@$(MKDIR_P) qt/res
-	@: > qt/res/$(am__dirstamp)
-qt/res/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) qt/res/$(DEPDIR)
-	@: > qt/res/$(DEPDIR)/$(am__dirstamp)
-qt/res/bitcoinII-qt-res.$(OBJEXT): qt/res/$(am__dirstamp) \
-	qt/res/$(DEPDIR)/$(am__dirstamp)
-init/bitcoinII_gui-bitcoinII-gui.$(OBJEXT): init/$(am__dirstamp) \
-	init/$(DEPDIR)/$(am__dirstamp)
-
-bitcoinII-gui$(EXEEXT): $(bitcoinII_gui_OBJECTS) $(bitcoinII_gui_DEPENDENCIES) $(EXTRA_bitcoinII_gui_DEPENDENCIES) 
-	@rm -f bitcoinII-gui$(EXEEXT)
-	$(AM_V_CXXLD)$(bitcoinII_gui_LINK) $(bitcoinII_gui_OBJECTS) $(bitcoinII_gui_LDADD) $(LIBS)
 
 bitcoincashII-chainstate$(EXEEXT): $(bitcoincashII_chainstate_OBJECTS) $(bitcoincashII_chainstate_DEPENDENCIES) $(EXTRA_bitcoincashII_chainstate_DEPENDENCIES) 
 	@rm -f bitcoincashII-chainstate$(EXEEXT)
@@ -7913,6 +7901,22 @@ bitcoincashII-chainstate$(EXEEXT): $(bitcoincashII_chainstate_OBJECTS) $(bitcoin
 bitcoincashII-cli$(EXEEXT): $(bitcoincashII_cli_OBJECTS) $(bitcoincashII_cli_DEPENDENCIES) $(EXTRA_bitcoincashII_cli_DEPENDENCIES) 
 	@rm -f bitcoincashII-cli$(EXEEXT)
 	$(AM_V_CXXLD)$(bitcoincashII_cli_LINK) $(bitcoincashII_cli_OBJECTS) $(bitcoincashII_cli_LDADD) $(LIBS)
+qt/bitcoincashII_gui-main.$(OBJEXT): qt/$(am__dirstamp) \
+	qt/$(DEPDIR)/$(am__dirstamp)
+qt/res/$(am__dirstamp):
+	@$(MKDIR_P) qt/res
+	@: > qt/res/$(am__dirstamp)
+qt/res/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) qt/res/$(DEPDIR)
+	@: > qt/res/$(DEPDIR)/$(am__dirstamp)
+qt/res/bitcoincashII-qt-res.$(OBJEXT): qt/res/$(am__dirstamp) \
+	qt/res/$(DEPDIR)/$(am__dirstamp)
+init/bitcoincashII_gui-bitcoincashII-gui.$(OBJEXT):  \
+	init/$(am__dirstamp) init/$(DEPDIR)/$(am__dirstamp)
+
+bitcoincashII-gui$(EXEEXT): $(bitcoincashII_gui_OBJECTS) $(bitcoincashII_gui_DEPENDENCIES) $(EXTRA_bitcoincashII_gui_DEPENDENCIES) 
+	@rm -f bitcoincashII-gui$(EXEEXT)
+	$(AM_V_CXXLD)$(bitcoincashII_gui_LINK) $(bitcoincashII_gui_OBJECTS) $(bitcoincashII_gui_LDADD) $(LIBS)
 init/bitcoincashII_node-bitcoinII-node.$(OBJEXT):  \
 	init/$(am__dirstamp) init/$(DEPDIR)/$(am__dirstamp)
 
@@ -7945,15 +7949,15 @@ minisketch/src/test-test.$(OBJEXT): minisketch/src/$(am__dirstamp) \
 minisketch/test$(EXEEXT): $(minisketch_test_OBJECTS) $(minisketch_test_DEPENDENCIES) $(EXTRA_minisketch_test_DEPENDENCIES) minisketch/$(am__dirstamp)
 	@rm -f minisketch/test$(EXEEXT)
 	$(AM_V_CXXLD)$(minisketch_test_LINK) $(minisketch_test_OBJECTS) $(minisketch_test_LDADD) $(LIBS)
-qt/bitcoinII_qt-main.$(OBJEXT): qt/$(am__dirstamp) \
+qt/bitcoincashII_qt-main.$(OBJEXT): qt/$(am__dirstamp) \
 	qt/$(DEPDIR)/$(am__dirstamp)
-init/qt_bitcoinII_qt-bitcoinII-qt.$(OBJEXT): init/$(am__dirstamp) \
-	init/$(DEPDIR)/$(am__dirstamp)
+init/qt_bitcoincashII_qt-bitcoincashII-qt.$(OBJEXT):  \
+	init/$(am__dirstamp) init/$(DEPDIR)/$(am__dirstamp)
 
-qt/bitcoinII-qt$(EXEEXT): $(qt_bitcoinII_qt_OBJECTS) $(qt_bitcoinII_qt_DEPENDENCIES) $(EXTRA_qt_bitcoinII_qt_DEPENDENCIES) qt/$(am__dirstamp)
-	@rm -f qt/bitcoinII-qt$(EXEEXT)
-	$(AM_V_CXXLD)$(qt_bitcoinII_qt_LINK) $(qt_bitcoinII_qt_OBJECTS) $(qt_bitcoinII_qt_LDADD) $(LIBS)
-init/qt_test_test_bitcoinII_qt-bitcoinII-qt.$(OBJEXT):  \
+qt/bitcoincashII-qt$(EXEEXT): $(qt_bitcoincashII_qt_OBJECTS) $(qt_bitcoincashII_qt_DEPENDENCIES) $(EXTRA_qt_bitcoincashII_qt_DEPENDENCIES) qt/$(am__dirstamp)
+	@rm -f qt/bitcoincashII-qt$(EXEEXT)
+	$(AM_V_CXXLD)$(qt_bitcoincashII_qt_LINK) $(qt_bitcoincashII_qt_OBJECTS) $(qt_bitcoincashII_qt_LDADD) $(LIBS)
+init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.$(OBJEXT):  \
 	init/$(am__dirstamp) init/$(DEPDIR)/$(am__dirstamp)
 qt/test/$(am__dirstamp):
 	@$(MKDIR_P) qt/test
@@ -7961,41 +7965,41 @@ qt/test/$(am__dirstamp):
 qt/test/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) qt/test/$(DEPDIR)
 	@: > qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-apptests.$(OBJEXT): qt/test/$(am__dirstamp) \
+qt/test/test_bitcoincashII_qt-apptests.$(OBJEXT):  \
+	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
+qt/test/test_bitcoincashII_qt-optiontests.$(OBJEXT):  \
+	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
+qt/test/test_bitcoincashII_qt-rpcnestedtests.$(OBJEXT):  \
+	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
+qt/test/test_bitcoincashII_qt-test_main.$(OBJEXT):  \
+	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
+qt/test/test_bitcoincashII_qt-uritests.$(OBJEXT):  \
+	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
+qt/test/test_bitcoincashII_qt-util.$(OBJEXT): qt/test/$(am__dirstamp) \
 	qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-optiontests.$(OBJEXT):  \
+qt/test/test_bitcoincashII_qt-addressbooktests.$(OBJEXT):  \
 	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-rpcnestedtests.$(OBJEXT):  \
+qt/test/test_bitcoincashII_qt-wallettests.$(OBJEXT):  \
 	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-test_main.$(OBJEXT):  \
-	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-uritests.$(OBJEXT): qt/test/$(am__dirstamp) \
-	qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-util.$(OBJEXT): qt/test/$(am__dirstamp) \
-	qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-addressbooktests.$(OBJEXT):  \
-	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-wallettests.$(OBJEXT):  \
-	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.$(OBJEXT):  \
+wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.$(OBJEXT):  \
 	wallet/test/$(am__dirstamp) \
 	wallet/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-moc_apptests.$(OBJEXT):  \
+qt/test/test_bitcoincashII_qt-moc_apptests.$(OBJEXT):  \
 	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-moc_optiontests.$(OBJEXT):  \
+qt/test/test_bitcoincashII_qt-moc_optiontests.$(OBJEXT):  \
 	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-moc_rpcnestedtests.$(OBJEXT):  \
+qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.$(OBJEXT):  \
 	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-moc_uritests.$(OBJEXT):  \
+qt/test/test_bitcoincashII_qt-moc_uritests.$(OBJEXT):  \
 	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-moc_addressbooktests.$(OBJEXT):  \
+qt/test/test_bitcoincashII_qt-moc_addressbooktests.$(OBJEXT):  \
 	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
-qt/test/test_bitcoinII_qt-moc_wallettests.$(OBJEXT):  \
+qt/test/test_bitcoincashII_qt-moc_wallettests.$(OBJEXT):  \
 	qt/test/$(am__dirstamp) qt/test/$(DEPDIR)/$(am__dirstamp)
 
-qt/test/test_bitcoinII-qt$(EXEEXT): $(qt_test_test_bitcoinII_qt_OBJECTS) $(qt_test_test_bitcoinII_qt_DEPENDENCIES) $(EXTRA_qt_test_test_bitcoinII_qt_DEPENDENCIES) qt/test/$(am__dirstamp)
-	@rm -f qt/test/test_bitcoinII-qt$(EXEEXT)
-	$(AM_V_CXXLD)$(qt_test_test_bitcoinII_qt_LINK) $(qt_test_test_bitcoinII_qt_OBJECTS) $(qt_test_test_bitcoinII_qt_LDADD) $(LIBS)
+qt/test/test_bitcoincashII-qt$(EXEEXT): $(qt_test_test_bitcoincashII_qt_OBJECTS) $(qt_test_test_bitcoincashII_qt_DEPENDENCIES) $(EXTRA_qt_test_test_bitcoincashII_qt_DEPENDENCIES) qt/test/$(am__dirstamp)
+	@rm -f qt/test/test_bitcoincashII-qt$(EXEEXT)
+	$(AM_V_CXXLD)$(qt_test_test_bitcoincashII_qt_LINK) $(qt_test_test_bitcoincashII_qt_OBJECTS) $(qt_test_test_bitcoincashII_qt_LDADD) $(LIBS)
 wallet/test/fuzz/$(am__dirstamp):
 	@$(MKDIR_P) wallet/test/fuzz
 	@: > wallet/test/fuzz/$(am__dirstamp)
@@ -8876,13 +8880,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@index/$(DEPDIR)/libbitcoinII_node_a-blockfilterindex.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@index/$(DEPDIR)/libbitcoinII_node_a-coinstatsindex.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@index/$(DEPDIR)/libbitcoinII_node_a-txindex.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/bitcoincashII_node-bitcoinII-node.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/bitcoincashII_wallet-bitcoinII-wallet.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/bitcoincashIId-bitcoinIId.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/libbitcoinII_common_a-common.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@ipc/$(DEPDIR)/libbitcoinII_ipc_a-interfaces.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@ipc/$(DEPDIR)/libbitcoinII_ipc_a-process.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@ipc/capnp/$(DEPDIR)/libbitcoinII_ipc_a-echo.capnp.Po@am__quote@ # am--include-marker
@@ -9023,8 +9027,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@primitives/$(DEPDIR)/libbitcoinIIconsensus_la-transaction.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@primitives/$(DEPDIR)/libbitcoinIIkernel_la-block.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@primitives/$(DEPDIR)/libbitcoinIIkernel_la-transaction.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/bitcoinII_gui-main.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/bitcoinII_qt-main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/bitcoincashII_gui-main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/bitcoincashII_qt-main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/libbitcoinIIqt_a-addressbookpage.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/libbitcoinIIqt_a-addresstablemodel.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/libbitcoinIIqt_a-askpassphrasedialog.Po@am__quote@ # am--include-marker
@@ -9139,20 +9143,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/libbitcoinIIqt_a-walletmodeltransaction.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/libbitcoinIIqt_a-walletview.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@qt/$(DEPDIR)/libbitcoinIIqt_a-winshutdownmonitor.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@rpc/$(DEPDIR)/libbitcoinII_cli_a-client.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@rpc/$(DEPDIR)/libbitcoinII_common_a-external_signer.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@rpc/$(DEPDIR)/libbitcoinII_common_a-rawtransaction_util.Po@am__quote@ # am--include-marker
@@ -9569,7 +9573,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@wallet/rpc/$(DEPDIR)/libbitcoinII_wallet_a-util.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@wallet/rpc/$(DEPDIR)/libbitcoinII_wallet_a-wallet.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@wallet/test/$(DEPDIR)/libtest_util_a-util.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@wallet/test/$(DEPDIR)/test_test_bitcoinII-coinselector_tests.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@wallet/test/$(DEPDIR)/test_test_bitcoinII-db_tests.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@wallet/test/$(DEPDIR)/test_test_bitcoinII-feebumper_tests.Po@am__quote@ # am--include-marker
@@ -17294,34 +17298,6 @@ bench/bench_bitcoinII-wallet_ismine.obj: bench/wallet_ismine.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bench_bench_bitcoinII_CPPFLAGS) $(CPPFLAGS) $(bench_bench_bitcoinII_CXXFLAGS) $(CXXFLAGS) -c -o bench/bench_bitcoinII-wallet_ismine.obj `if test -f 'bench/wallet_ismine.cpp'; then $(CYGPATH_W) 'bench/wallet_ismine.cpp'; else $(CYGPATH_W) '$(srcdir)/bench/wallet_ismine.cpp'; fi`
 
-qt/bitcoinII_gui-main.o: qt/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoinII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) -MT qt/bitcoinII_gui-main.o -MD -MP -MF qt/$(DEPDIR)/bitcoinII_gui-main.Tpo -c -o qt/bitcoinII_gui-main.o `test -f 'qt/main.cpp' || echo '$(srcdir)/'`qt/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/$(DEPDIR)/bitcoinII_gui-main.Tpo qt/$(DEPDIR)/bitcoinII_gui-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/main.cpp' object='qt/bitcoinII_gui-main.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoinII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) -c -o qt/bitcoinII_gui-main.o `test -f 'qt/main.cpp' || echo '$(srcdir)/'`qt/main.cpp
-
-qt/bitcoinII_gui-main.obj: qt/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoinII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) -MT qt/bitcoinII_gui-main.obj -MD -MP -MF qt/$(DEPDIR)/bitcoinII_gui-main.Tpo -c -o qt/bitcoinII_gui-main.obj `if test -f 'qt/main.cpp'; then $(CYGPATH_W) 'qt/main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/main.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/$(DEPDIR)/bitcoinII_gui-main.Tpo qt/$(DEPDIR)/bitcoinII_gui-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/main.cpp' object='qt/bitcoinII_gui-main.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoinII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) -c -o qt/bitcoinII_gui-main.obj `if test -f 'qt/main.cpp'; then $(CYGPATH_W) 'qt/main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/main.cpp'; fi`
-
-init/bitcoinII_gui-bitcoinII-gui.o: init/bitcoinII-gui.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoinII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) -MT init/bitcoinII_gui-bitcoinII-gui.o -MD -MP -MF init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Tpo -c -o init/bitcoinII_gui-bitcoinII-gui.o `test -f 'init/bitcoinII-gui.cpp' || echo '$(srcdir)/'`init/bitcoinII-gui.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Tpo init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoinII-gui.cpp' object='init/bitcoinII_gui-bitcoinII-gui.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoinII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) -c -o init/bitcoinII_gui-bitcoinII-gui.o `test -f 'init/bitcoinII-gui.cpp' || echo '$(srcdir)/'`init/bitcoinII-gui.cpp
-
-init/bitcoinII_gui-bitcoinII-gui.obj: init/bitcoinII-gui.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoinII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) -MT init/bitcoinII_gui-bitcoinII-gui.obj -MD -MP -MF init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Tpo -c -o init/bitcoinII_gui-bitcoinII-gui.obj `if test -f 'init/bitcoinII-gui.cpp'; then $(CYGPATH_W) 'init/bitcoinII-gui.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoinII-gui.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Tpo init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoinII-gui.cpp' object='init/bitcoinII_gui-bitcoinII-gui.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoinII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoinII_gui_CXXFLAGS) $(CXXFLAGS) -c -o init/bitcoinII_gui-bitcoinII-gui.obj `if test -f 'init/bitcoinII-gui.cpp'; then $(CYGPATH_W) 'init/bitcoinII-gui.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoinII-gui.cpp'; fi`
-
 bitcoincashII_chainstate-bitcoinII-chainstate.o: bitcoinII-chainstate.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_chainstate_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_chainstate_CXXFLAGS) $(CXXFLAGS) -MT bitcoincashII_chainstate-bitcoinII-chainstate.o -MD -MP -MF $(DEPDIR)/bitcoincashII_chainstate-bitcoinII-chainstate.Tpo -c -o bitcoincashII_chainstate-bitcoinII-chainstate.o `test -f 'bitcoinII-chainstate.cpp' || echo '$(srcdir)/'`bitcoinII-chainstate.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/bitcoincashII_chainstate-bitcoinII-chainstate.Tpo $(DEPDIR)/bitcoincashII_chainstate-bitcoinII-chainstate.Po
@@ -17349,6 +17325,34 @@ bitcoincashII_cli-bitcoinII-cli.obj: bitcoinII-cli.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='bitcoinII-cli.cpp' object='bitcoincashII_cli-bitcoinII-cli.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_cli_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_cli_CXXFLAGS) $(CXXFLAGS) -c -o bitcoincashII_cli-bitcoinII-cli.obj `if test -f 'bitcoinII-cli.cpp'; then $(CYGPATH_W) 'bitcoinII-cli.cpp'; else $(CYGPATH_W) '$(srcdir)/bitcoinII-cli.cpp'; fi`
+
+qt/bitcoincashII_gui-main.o: qt/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) -MT qt/bitcoincashII_gui-main.o -MD -MP -MF qt/$(DEPDIR)/bitcoincashII_gui-main.Tpo -c -o qt/bitcoincashII_gui-main.o `test -f 'qt/main.cpp' || echo '$(srcdir)/'`qt/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/$(DEPDIR)/bitcoincashII_gui-main.Tpo qt/$(DEPDIR)/bitcoincashII_gui-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/main.cpp' object='qt/bitcoincashII_gui-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) -c -o qt/bitcoincashII_gui-main.o `test -f 'qt/main.cpp' || echo '$(srcdir)/'`qt/main.cpp
+
+qt/bitcoincashII_gui-main.obj: qt/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) -MT qt/bitcoincashII_gui-main.obj -MD -MP -MF qt/$(DEPDIR)/bitcoincashII_gui-main.Tpo -c -o qt/bitcoincashII_gui-main.obj `if test -f 'qt/main.cpp'; then $(CYGPATH_W) 'qt/main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/main.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/$(DEPDIR)/bitcoincashII_gui-main.Tpo qt/$(DEPDIR)/bitcoincashII_gui-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/main.cpp' object='qt/bitcoincashII_gui-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) -c -o qt/bitcoincashII_gui-main.obj `if test -f 'qt/main.cpp'; then $(CYGPATH_W) 'qt/main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/main.cpp'; fi`
+
+init/bitcoincashII_gui-bitcoincashII-gui.o: init/bitcoincashII-gui.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) -MT init/bitcoincashII_gui-bitcoincashII-gui.o -MD -MP -MF init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Tpo -c -o init/bitcoincashII_gui-bitcoincashII-gui.o `test -f 'init/bitcoincashII-gui.cpp' || echo '$(srcdir)/'`init/bitcoincashII-gui.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Tpo init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoincashII-gui.cpp' object='init/bitcoincashII_gui-bitcoincashII-gui.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) -c -o init/bitcoincashII_gui-bitcoincashII-gui.o `test -f 'init/bitcoincashII-gui.cpp' || echo '$(srcdir)/'`init/bitcoincashII-gui.cpp
+
+init/bitcoincashII_gui-bitcoincashII-gui.obj: init/bitcoincashII-gui.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) -MT init/bitcoincashII_gui-bitcoincashII-gui.obj -MD -MP -MF init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Tpo -c -o init/bitcoincashII_gui-bitcoincashII-gui.obj `if test -f 'init/bitcoincashII-gui.cpp'; then $(CYGPATH_W) 'init/bitcoincashII-gui.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoincashII-gui.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Tpo init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoincashII-gui.cpp' object='init/bitcoincashII_gui-bitcoincashII-gui.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_gui_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_gui_CXXFLAGS) $(CXXFLAGS) -c -o init/bitcoincashII_gui-bitcoincashII-gui.obj `if test -f 'init/bitcoincashII-gui.cpp'; then $(CYGPATH_W) 'init/bitcoincashII-gui.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoincashII-gui.cpp'; fi`
 
 bitcoincashII_node-bitcoinIId.o: bitcoinIId.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bitcoincashII_node_CPPFLAGS) $(CPPFLAGS) $(bitcoincashII_node_CXXFLAGS) $(CXXFLAGS) -MT bitcoincashII_node-bitcoinIId.o -MD -MP -MF $(DEPDIR)/bitcoincashII_node-bitcoinIId.Tpo -c -o bitcoincashII_node-bitcoinIId.o `test -f 'bitcoinIId.cpp' || echo '$(srcdir)/'`bitcoinIId.cpp
@@ -17476,257 +17480,257 @@ minisketch/src/test-test.obj: minisketch/src/test.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minisketch_test_CPPFLAGS) $(CPPFLAGS) $(minisketch_test_CXXFLAGS) $(CXXFLAGS) -c -o minisketch/src/test-test.obj `if test -f 'minisketch/src/test.cpp'; then $(CYGPATH_W) 'minisketch/src/test.cpp'; else $(CYGPATH_W) '$(srcdir)/minisketch/src/test.cpp'; fi`
 
-qt/bitcoinII_qt-main.o: qt/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/bitcoinII_qt-main.o -MD -MP -MF qt/$(DEPDIR)/bitcoinII_qt-main.Tpo -c -o qt/bitcoinII_qt-main.o `test -f 'qt/main.cpp' || echo '$(srcdir)/'`qt/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/$(DEPDIR)/bitcoinII_qt-main.Tpo qt/$(DEPDIR)/bitcoinII_qt-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/main.cpp' object='qt/bitcoinII_qt-main.o' libtool=no @AMDEPBACKSLASH@
+qt/bitcoincashII_qt-main.o: qt/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/bitcoincashII_qt-main.o -MD -MP -MF qt/$(DEPDIR)/bitcoincashII_qt-main.Tpo -c -o qt/bitcoincashII_qt-main.o `test -f 'qt/main.cpp' || echo '$(srcdir)/'`qt/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/$(DEPDIR)/bitcoincashII_qt-main.Tpo qt/$(DEPDIR)/bitcoincashII_qt-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/main.cpp' object='qt/bitcoincashII_qt-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/bitcoinII_qt-main.o `test -f 'qt/main.cpp' || echo '$(srcdir)/'`qt/main.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/bitcoincashII_qt-main.o `test -f 'qt/main.cpp' || echo '$(srcdir)/'`qt/main.cpp
 
-qt/bitcoinII_qt-main.obj: qt/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/bitcoinII_qt-main.obj -MD -MP -MF qt/$(DEPDIR)/bitcoinII_qt-main.Tpo -c -o qt/bitcoinII_qt-main.obj `if test -f 'qt/main.cpp'; then $(CYGPATH_W) 'qt/main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/main.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/$(DEPDIR)/bitcoinII_qt-main.Tpo qt/$(DEPDIR)/bitcoinII_qt-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/main.cpp' object='qt/bitcoinII_qt-main.obj' libtool=no @AMDEPBACKSLASH@
+qt/bitcoincashII_qt-main.obj: qt/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/bitcoincashII_qt-main.obj -MD -MP -MF qt/$(DEPDIR)/bitcoincashII_qt-main.Tpo -c -o qt/bitcoincashII_qt-main.obj `if test -f 'qt/main.cpp'; then $(CYGPATH_W) 'qt/main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/main.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/$(DEPDIR)/bitcoincashII_qt-main.Tpo qt/$(DEPDIR)/bitcoincashII_qt-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/main.cpp' object='qt/bitcoincashII_qt-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/bitcoinII_qt-main.obj `if test -f 'qt/main.cpp'; then $(CYGPATH_W) 'qt/main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/main.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/bitcoincashII_qt-main.obj `if test -f 'qt/main.cpp'; then $(CYGPATH_W) 'qt/main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/main.cpp'; fi`
 
-init/qt_bitcoinII_qt-bitcoinII-qt.o: init/bitcoinII-qt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT init/qt_bitcoinII_qt-bitcoinII-qt.o -MD -MP -MF init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Tpo -c -o init/qt_bitcoinII_qt-bitcoinII-qt.o `test -f 'init/bitcoinII-qt.cpp' || echo '$(srcdir)/'`init/bitcoinII-qt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Tpo init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoinII-qt.cpp' object='init/qt_bitcoinII_qt-bitcoinII-qt.o' libtool=no @AMDEPBACKSLASH@
+init/qt_bitcoincashII_qt-bitcoincashII-qt.o: init/bitcoincashII-qt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT init/qt_bitcoincashII_qt-bitcoincashII-qt.o -MD -MP -MF init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Tpo -c -o init/qt_bitcoincashII_qt-bitcoincashII-qt.o `test -f 'init/bitcoincashII-qt.cpp' || echo '$(srcdir)/'`init/bitcoincashII-qt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Tpo init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoincashII-qt.cpp' object='init/qt_bitcoincashII_qt-bitcoincashII-qt.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o init/qt_bitcoinII_qt-bitcoinII-qt.o `test -f 'init/bitcoinII-qt.cpp' || echo '$(srcdir)/'`init/bitcoinII-qt.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o init/qt_bitcoincashII_qt-bitcoincashII-qt.o `test -f 'init/bitcoincashII-qt.cpp' || echo '$(srcdir)/'`init/bitcoincashII-qt.cpp
 
-init/qt_bitcoinII_qt-bitcoinII-qt.obj: init/bitcoinII-qt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT init/qt_bitcoinII_qt-bitcoinII-qt.obj -MD -MP -MF init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Tpo -c -o init/qt_bitcoinII_qt-bitcoinII-qt.obj `if test -f 'init/bitcoinII-qt.cpp'; then $(CYGPATH_W) 'init/bitcoinII-qt.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoinII-qt.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Tpo init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoinII-qt.cpp' object='init/qt_bitcoinII_qt-bitcoinII-qt.obj' libtool=no @AMDEPBACKSLASH@
+init/qt_bitcoincashII_qt-bitcoincashII-qt.obj: init/bitcoincashII-qt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT init/qt_bitcoincashII_qt-bitcoincashII-qt.obj -MD -MP -MF init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Tpo -c -o init/qt_bitcoincashII_qt-bitcoincashII-qt.obj `if test -f 'init/bitcoincashII-qt.cpp'; then $(CYGPATH_W) 'init/bitcoincashII-qt.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoincashII-qt.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Tpo init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoincashII-qt.cpp' object='init/qt_bitcoincashII_qt-bitcoincashII-qt.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o init/qt_bitcoinII_qt-bitcoinII-qt.obj `if test -f 'init/bitcoinII-qt.cpp'; then $(CYGPATH_W) 'init/bitcoinII-qt.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoinII-qt.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o init/qt_bitcoincashII_qt-bitcoincashII-qt.obj `if test -f 'init/bitcoincashII-qt.cpp'; then $(CYGPATH_W) 'init/bitcoincashII-qt.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoincashII-qt.cpp'; fi`
 
-init/qt_test_test_bitcoinII_qt-bitcoinII-qt.o: init/bitcoinII-qt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT init/qt_test_test_bitcoinII_qt-bitcoinII-qt.o -MD -MP -MF init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Tpo -c -o init/qt_test_test_bitcoinII_qt-bitcoinII-qt.o `test -f 'init/bitcoinII-qt.cpp' || echo '$(srcdir)/'`init/bitcoinII-qt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Tpo init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoinII-qt.cpp' object='init/qt_test_test_bitcoinII_qt-bitcoinII-qt.o' libtool=no @AMDEPBACKSLASH@
+init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.o: init/bitcoincashII-qt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.o -MD -MP -MF init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Tpo -c -o init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.o `test -f 'init/bitcoincashII-qt.cpp' || echo '$(srcdir)/'`init/bitcoincashII-qt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Tpo init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoincashII-qt.cpp' object='init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o init/qt_test_test_bitcoinII_qt-bitcoinII-qt.o `test -f 'init/bitcoinII-qt.cpp' || echo '$(srcdir)/'`init/bitcoinII-qt.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.o `test -f 'init/bitcoincashII-qt.cpp' || echo '$(srcdir)/'`init/bitcoincashII-qt.cpp
 
-init/qt_test_test_bitcoinII_qt-bitcoinII-qt.obj: init/bitcoinII-qt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT init/qt_test_test_bitcoinII_qt-bitcoinII-qt.obj -MD -MP -MF init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Tpo -c -o init/qt_test_test_bitcoinII_qt-bitcoinII-qt.obj `if test -f 'init/bitcoinII-qt.cpp'; then $(CYGPATH_W) 'init/bitcoinII-qt.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoinII-qt.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Tpo init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoinII-qt.cpp' object='init/qt_test_test_bitcoinII_qt-bitcoinII-qt.obj' libtool=no @AMDEPBACKSLASH@
+init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.obj: init/bitcoincashII-qt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.obj -MD -MP -MF init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Tpo -c -o init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.obj `if test -f 'init/bitcoincashII-qt.cpp'; then $(CYGPATH_W) 'init/bitcoincashII-qt.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoincashII-qt.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Tpo init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='init/bitcoincashII-qt.cpp' object='init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o init/qt_test_test_bitcoinII_qt-bitcoinII-qt.obj `if test -f 'init/bitcoinII-qt.cpp'; then $(CYGPATH_W) 'init/bitcoinII-qt.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoinII-qt.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o init/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.obj `if test -f 'init/bitcoincashII-qt.cpp'; then $(CYGPATH_W) 'init/bitcoincashII-qt.cpp'; else $(CYGPATH_W) '$(srcdir)/init/bitcoincashII-qt.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-apptests.o: qt/test/apptests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-apptests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Tpo -c -o qt/test/test_bitcoinII_qt-apptests.o `test -f 'qt/test/apptests.cpp' || echo '$(srcdir)/'`qt/test/apptests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/apptests.cpp' object='qt/test/test_bitcoinII_qt-apptests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-apptests.o: qt/test/apptests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-apptests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Tpo -c -o qt/test/test_bitcoincashII_qt-apptests.o `test -f 'qt/test/apptests.cpp' || echo '$(srcdir)/'`qt/test/apptests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/apptests.cpp' object='qt/test/test_bitcoincashII_qt-apptests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-apptests.o `test -f 'qt/test/apptests.cpp' || echo '$(srcdir)/'`qt/test/apptests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-apptests.o `test -f 'qt/test/apptests.cpp' || echo '$(srcdir)/'`qt/test/apptests.cpp
 
-qt/test/test_bitcoinII_qt-apptests.obj: qt/test/apptests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-apptests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Tpo -c -o qt/test/test_bitcoinII_qt-apptests.obj `if test -f 'qt/test/apptests.cpp'; then $(CYGPATH_W) 'qt/test/apptests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/apptests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/apptests.cpp' object='qt/test/test_bitcoinII_qt-apptests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-apptests.obj: qt/test/apptests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-apptests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Tpo -c -o qt/test/test_bitcoincashII_qt-apptests.obj `if test -f 'qt/test/apptests.cpp'; then $(CYGPATH_W) 'qt/test/apptests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/apptests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/apptests.cpp' object='qt/test/test_bitcoincashII_qt-apptests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-apptests.obj `if test -f 'qt/test/apptests.cpp'; then $(CYGPATH_W) 'qt/test/apptests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/apptests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-apptests.obj `if test -f 'qt/test/apptests.cpp'; then $(CYGPATH_W) 'qt/test/apptests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/apptests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-optiontests.o: qt/test/optiontests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-optiontests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Tpo -c -o qt/test/test_bitcoinII_qt-optiontests.o `test -f 'qt/test/optiontests.cpp' || echo '$(srcdir)/'`qt/test/optiontests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/optiontests.cpp' object='qt/test/test_bitcoinII_qt-optiontests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-optiontests.o: qt/test/optiontests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-optiontests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Tpo -c -o qt/test/test_bitcoincashII_qt-optiontests.o `test -f 'qt/test/optiontests.cpp' || echo '$(srcdir)/'`qt/test/optiontests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/optiontests.cpp' object='qt/test/test_bitcoincashII_qt-optiontests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-optiontests.o `test -f 'qt/test/optiontests.cpp' || echo '$(srcdir)/'`qt/test/optiontests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-optiontests.o `test -f 'qt/test/optiontests.cpp' || echo '$(srcdir)/'`qt/test/optiontests.cpp
 
-qt/test/test_bitcoinII_qt-optiontests.obj: qt/test/optiontests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-optiontests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Tpo -c -o qt/test/test_bitcoinII_qt-optiontests.obj `if test -f 'qt/test/optiontests.cpp'; then $(CYGPATH_W) 'qt/test/optiontests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/optiontests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/optiontests.cpp' object='qt/test/test_bitcoinII_qt-optiontests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-optiontests.obj: qt/test/optiontests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-optiontests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Tpo -c -o qt/test/test_bitcoincashII_qt-optiontests.obj `if test -f 'qt/test/optiontests.cpp'; then $(CYGPATH_W) 'qt/test/optiontests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/optiontests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/optiontests.cpp' object='qt/test/test_bitcoincashII_qt-optiontests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-optiontests.obj `if test -f 'qt/test/optiontests.cpp'; then $(CYGPATH_W) 'qt/test/optiontests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/optiontests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-optiontests.obj `if test -f 'qt/test/optiontests.cpp'; then $(CYGPATH_W) 'qt/test/optiontests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/optiontests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-rpcnestedtests.o: qt/test/rpcnestedtests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-rpcnestedtests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Tpo -c -o qt/test/test_bitcoinII_qt-rpcnestedtests.o `test -f 'qt/test/rpcnestedtests.cpp' || echo '$(srcdir)/'`qt/test/rpcnestedtests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/rpcnestedtests.cpp' object='qt/test/test_bitcoinII_qt-rpcnestedtests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-rpcnestedtests.o: qt/test/rpcnestedtests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-rpcnestedtests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Tpo -c -o qt/test/test_bitcoincashII_qt-rpcnestedtests.o `test -f 'qt/test/rpcnestedtests.cpp' || echo '$(srcdir)/'`qt/test/rpcnestedtests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/rpcnestedtests.cpp' object='qt/test/test_bitcoincashII_qt-rpcnestedtests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-rpcnestedtests.o `test -f 'qt/test/rpcnestedtests.cpp' || echo '$(srcdir)/'`qt/test/rpcnestedtests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-rpcnestedtests.o `test -f 'qt/test/rpcnestedtests.cpp' || echo '$(srcdir)/'`qt/test/rpcnestedtests.cpp
 
-qt/test/test_bitcoinII_qt-rpcnestedtests.obj: qt/test/rpcnestedtests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-rpcnestedtests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Tpo -c -o qt/test/test_bitcoinII_qt-rpcnestedtests.obj `if test -f 'qt/test/rpcnestedtests.cpp'; then $(CYGPATH_W) 'qt/test/rpcnestedtests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/rpcnestedtests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/rpcnestedtests.cpp' object='qt/test/test_bitcoinII_qt-rpcnestedtests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-rpcnestedtests.obj: qt/test/rpcnestedtests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-rpcnestedtests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Tpo -c -o qt/test/test_bitcoincashII_qt-rpcnestedtests.obj `if test -f 'qt/test/rpcnestedtests.cpp'; then $(CYGPATH_W) 'qt/test/rpcnestedtests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/rpcnestedtests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/rpcnestedtests.cpp' object='qt/test/test_bitcoincashII_qt-rpcnestedtests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-rpcnestedtests.obj `if test -f 'qt/test/rpcnestedtests.cpp'; then $(CYGPATH_W) 'qt/test/rpcnestedtests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/rpcnestedtests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-rpcnestedtests.obj `if test -f 'qt/test/rpcnestedtests.cpp'; then $(CYGPATH_W) 'qt/test/rpcnestedtests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/rpcnestedtests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-test_main.o: qt/test/test_main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-test_main.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Tpo -c -o qt/test/test_bitcoinII_qt-test_main.o `test -f 'qt/test/test_main.cpp' || echo '$(srcdir)/'`qt/test/test_main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/test_main.cpp' object='qt/test/test_bitcoinII_qt-test_main.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-test_main.o: qt/test/test_main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-test_main.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Tpo -c -o qt/test/test_bitcoincashII_qt-test_main.o `test -f 'qt/test/test_main.cpp' || echo '$(srcdir)/'`qt/test/test_main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/test_main.cpp' object='qt/test/test_bitcoincashII_qt-test_main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-test_main.o `test -f 'qt/test/test_main.cpp' || echo '$(srcdir)/'`qt/test/test_main.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-test_main.o `test -f 'qt/test/test_main.cpp' || echo '$(srcdir)/'`qt/test/test_main.cpp
 
-qt/test/test_bitcoinII_qt-test_main.obj: qt/test/test_main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-test_main.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Tpo -c -o qt/test/test_bitcoinII_qt-test_main.obj `if test -f 'qt/test/test_main.cpp'; then $(CYGPATH_W) 'qt/test/test_main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/test_main.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/test_main.cpp' object='qt/test/test_bitcoinII_qt-test_main.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-test_main.obj: qt/test/test_main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-test_main.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Tpo -c -o qt/test/test_bitcoincashII_qt-test_main.obj `if test -f 'qt/test/test_main.cpp'; then $(CYGPATH_W) 'qt/test/test_main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/test_main.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/test_main.cpp' object='qt/test/test_bitcoincashII_qt-test_main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-test_main.obj `if test -f 'qt/test/test_main.cpp'; then $(CYGPATH_W) 'qt/test/test_main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/test_main.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-test_main.obj `if test -f 'qt/test/test_main.cpp'; then $(CYGPATH_W) 'qt/test/test_main.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/test_main.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-uritests.o: qt/test/uritests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-uritests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Tpo -c -o qt/test/test_bitcoinII_qt-uritests.o `test -f 'qt/test/uritests.cpp' || echo '$(srcdir)/'`qt/test/uritests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/uritests.cpp' object='qt/test/test_bitcoinII_qt-uritests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-uritests.o: qt/test/uritests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-uritests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Tpo -c -o qt/test/test_bitcoincashII_qt-uritests.o `test -f 'qt/test/uritests.cpp' || echo '$(srcdir)/'`qt/test/uritests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/uritests.cpp' object='qt/test/test_bitcoincashII_qt-uritests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-uritests.o `test -f 'qt/test/uritests.cpp' || echo '$(srcdir)/'`qt/test/uritests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-uritests.o `test -f 'qt/test/uritests.cpp' || echo '$(srcdir)/'`qt/test/uritests.cpp
 
-qt/test/test_bitcoinII_qt-uritests.obj: qt/test/uritests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-uritests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Tpo -c -o qt/test/test_bitcoinII_qt-uritests.obj `if test -f 'qt/test/uritests.cpp'; then $(CYGPATH_W) 'qt/test/uritests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/uritests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/uritests.cpp' object='qt/test/test_bitcoinII_qt-uritests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-uritests.obj: qt/test/uritests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-uritests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Tpo -c -o qt/test/test_bitcoincashII_qt-uritests.obj `if test -f 'qt/test/uritests.cpp'; then $(CYGPATH_W) 'qt/test/uritests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/uritests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/uritests.cpp' object='qt/test/test_bitcoincashII_qt-uritests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-uritests.obj `if test -f 'qt/test/uritests.cpp'; then $(CYGPATH_W) 'qt/test/uritests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/uritests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-uritests.obj `if test -f 'qt/test/uritests.cpp'; then $(CYGPATH_W) 'qt/test/uritests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/uritests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-util.o: qt/test/util.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-util.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Tpo -c -o qt/test/test_bitcoinII_qt-util.o `test -f 'qt/test/util.cpp' || echo '$(srcdir)/'`qt/test/util.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/util.cpp' object='qt/test/test_bitcoinII_qt-util.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-util.o: qt/test/util.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-util.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Tpo -c -o qt/test/test_bitcoincashII_qt-util.o `test -f 'qt/test/util.cpp' || echo '$(srcdir)/'`qt/test/util.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/util.cpp' object='qt/test/test_bitcoincashII_qt-util.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-util.o `test -f 'qt/test/util.cpp' || echo '$(srcdir)/'`qt/test/util.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-util.o `test -f 'qt/test/util.cpp' || echo '$(srcdir)/'`qt/test/util.cpp
 
-qt/test/test_bitcoinII_qt-util.obj: qt/test/util.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-util.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Tpo -c -o qt/test/test_bitcoinII_qt-util.obj `if test -f 'qt/test/util.cpp'; then $(CYGPATH_W) 'qt/test/util.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/util.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/util.cpp' object='qt/test/test_bitcoinII_qt-util.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-util.obj: qt/test/util.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-util.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Tpo -c -o qt/test/test_bitcoincashII_qt-util.obj `if test -f 'qt/test/util.cpp'; then $(CYGPATH_W) 'qt/test/util.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/util.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/util.cpp' object='qt/test/test_bitcoincashII_qt-util.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-util.obj `if test -f 'qt/test/util.cpp'; then $(CYGPATH_W) 'qt/test/util.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/util.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-util.obj `if test -f 'qt/test/util.cpp'; then $(CYGPATH_W) 'qt/test/util.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/util.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-addressbooktests.o: qt/test/addressbooktests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-addressbooktests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Tpo -c -o qt/test/test_bitcoinII_qt-addressbooktests.o `test -f 'qt/test/addressbooktests.cpp' || echo '$(srcdir)/'`qt/test/addressbooktests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/addressbooktests.cpp' object='qt/test/test_bitcoinII_qt-addressbooktests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-addressbooktests.o: qt/test/addressbooktests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-addressbooktests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Tpo -c -o qt/test/test_bitcoincashII_qt-addressbooktests.o `test -f 'qt/test/addressbooktests.cpp' || echo '$(srcdir)/'`qt/test/addressbooktests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/addressbooktests.cpp' object='qt/test/test_bitcoincashII_qt-addressbooktests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-addressbooktests.o `test -f 'qt/test/addressbooktests.cpp' || echo '$(srcdir)/'`qt/test/addressbooktests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-addressbooktests.o `test -f 'qt/test/addressbooktests.cpp' || echo '$(srcdir)/'`qt/test/addressbooktests.cpp
 
-qt/test/test_bitcoinII_qt-addressbooktests.obj: qt/test/addressbooktests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-addressbooktests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Tpo -c -o qt/test/test_bitcoinII_qt-addressbooktests.obj `if test -f 'qt/test/addressbooktests.cpp'; then $(CYGPATH_W) 'qt/test/addressbooktests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/addressbooktests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/addressbooktests.cpp' object='qt/test/test_bitcoinII_qt-addressbooktests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-addressbooktests.obj: qt/test/addressbooktests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-addressbooktests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Tpo -c -o qt/test/test_bitcoincashII_qt-addressbooktests.obj `if test -f 'qt/test/addressbooktests.cpp'; then $(CYGPATH_W) 'qt/test/addressbooktests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/addressbooktests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/addressbooktests.cpp' object='qt/test/test_bitcoincashII_qt-addressbooktests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-addressbooktests.obj `if test -f 'qt/test/addressbooktests.cpp'; then $(CYGPATH_W) 'qt/test/addressbooktests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/addressbooktests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-addressbooktests.obj `if test -f 'qt/test/addressbooktests.cpp'; then $(CYGPATH_W) 'qt/test/addressbooktests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/addressbooktests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-wallettests.o: qt/test/wallettests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-wallettests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Tpo -c -o qt/test/test_bitcoinII_qt-wallettests.o `test -f 'qt/test/wallettests.cpp' || echo '$(srcdir)/'`qt/test/wallettests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/wallettests.cpp' object='qt/test/test_bitcoinII_qt-wallettests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-wallettests.o: qt/test/wallettests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-wallettests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Tpo -c -o qt/test/test_bitcoincashII_qt-wallettests.o `test -f 'qt/test/wallettests.cpp' || echo '$(srcdir)/'`qt/test/wallettests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/wallettests.cpp' object='qt/test/test_bitcoincashII_qt-wallettests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-wallettests.o `test -f 'qt/test/wallettests.cpp' || echo '$(srcdir)/'`qt/test/wallettests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-wallettests.o `test -f 'qt/test/wallettests.cpp' || echo '$(srcdir)/'`qt/test/wallettests.cpp
 
-qt/test/test_bitcoinII_qt-wallettests.obj: qt/test/wallettests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-wallettests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Tpo -c -o qt/test/test_bitcoinII_qt-wallettests.obj `if test -f 'qt/test/wallettests.cpp'; then $(CYGPATH_W) 'qt/test/wallettests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/wallettests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/wallettests.cpp' object='qt/test/test_bitcoinII_qt-wallettests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-wallettests.obj: qt/test/wallettests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-wallettests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Tpo -c -o qt/test/test_bitcoincashII_qt-wallettests.obj `if test -f 'qt/test/wallettests.cpp'; then $(CYGPATH_W) 'qt/test/wallettests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/wallettests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/wallettests.cpp' object='qt/test/test_bitcoincashII_qt-wallettests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-wallettests.obj `if test -f 'qt/test/wallettests.cpp'; then $(CYGPATH_W) 'qt/test/wallettests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/wallettests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-wallettests.obj `if test -f 'qt/test/wallettests.cpp'; then $(CYGPATH_W) 'qt/test/wallettests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/wallettests.cpp'; fi`
 
-wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.o: wallet/test/wallet_test_fixture.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.o -MD -MP -MF wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Tpo -c -o wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.o `test -f 'wallet/test/wallet_test_fixture.cpp' || echo '$(srcdir)/'`wallet/test/wallet_test_fixture.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Tpo wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='wallet/test/wallet_test_fixture.cpp' object='wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.o' libtool=no @AMDEPBACKSLASH@
+wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.o: wallet/test/wallet_test_fixture.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.o -MD -MP -MF wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Tpo -c -o wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.o `test -f 'wallet/test/wallet_test_fixture.cpp' || echo '$(srcdir)/'`wallet/test/wallet_test_fixture.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Tpo wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='wallet/test/wallet_test_fixture.cpp' object='wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.o `test -f 'wallet/test/wallet_test_fixture.cpp' || echo '$(srcdir)/'`wallet/test/wallet_test_fixture.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.o `test -f 'wallet/test/wallet_test_fixture.cpp' || echo '$(srcdir)/'`wallet/test/wallet_test_fixture.cpp
 
-wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.obj: wallet/test/wallet_test_fixture.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.obj -MD -MP -MF wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Tpo -c -o wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.obj `if test -f 'wallet/test/wallet_test_fixture.cpp'; then $(CYGPATH_W) 'wallet/test/wallet_test_fixture.cpp'; else $(CYGPATH_W) '$(srcdir)/wallet/test/wallet_test_fixture.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Tpo wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='wallet/test/wallet_test_fixture.cpp' object='wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.obj' libtool=no @AMDEPBACKSLASH@
+wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.obj: wallet/test/wallet_test_fixture.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.obj -MD -MP -MF wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Tpo -c -o wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.obj `if test -f 'wallet/test/wallet_test_fixture.cpp'; then $(CYGPATH_W) 'wallet/test/wallet_test_fixture.cpp'; else $(CYGPATH_W) '$(srcdir)/wallet/test/wallet_test_fixture.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Tpo wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='wallet/test/wallet_test_fixture.cpp' object='wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o wallet/test/qt_test_test_bitcoinII_qt-wallet_test_fixture.obj `if test -f 'wallet/test/wallet_test_fixture.cpp'; then $(CYGPATH_W) 'wallet/test/wallet_test_fixture.cpp'; else $(CYGPATH_W) '$(srcdir)/wallet/test/wallet_test_fixture.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o wallet/test/qt_test_test_bitcoincashII_qt-wallet_test_fixture.obj `if test -f 'wallet/test/wallet_test_fixture.cpp'; then $(CYGPATH_W) 'wallet/test/wallet_test_fixture.cpp'; else $(CYGPATH_W) '$(srcdir)/wallet/test/wallet_test_fixture.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-moc_apptests.o: qt/test/moc_apptests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_apptests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_apptests.o `test -f 'qt/test/moc_apptests.cpp' || echo '$(srcdir)/'`qt/test/moc_apptests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_apptests.cpp' object='qt/test/test_bitcoinII_qt-moc_apptests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_apptests.o: qt/test/moc_apptests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_apptests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_apptests.o `test -f 'qt/test/moc_apptests.cpp' || echo '$(srcdir)/'`qt/test/moc_apptests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_apptests.cpp' object='qt/test/test_bitcoincashII_qt-moc_apptests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_apptests.o `test -f 'qt/test/moc_apptests.cpp' || echo '$(srcdir)/'`qt/test/moc_apptests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_apptests.o `test -f 'qt/test/moc_apptests.cpp' || echo '$(srcdir)/'`qt/test/moc_apptests.cpp
 
-qt/test/test_bitcoinII_qt-moc_apptests.obj: qt/test/moc_apptests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_apptests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_apptests.obj `if test -f 'qt/test/moc_apptests.cpp'; then $(CYGPATH_W) 'qt/test/moc_apptests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_apptests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_apptests.cpp' object='qt/test/test_bitcoinII_qt-moc_apptests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_apptests.obj: qt/test/moc_apptests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_apptests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_apptests.obj `if test -f 'qt/test/moc_apptests.cpp'; then $(CYGPATH_W) 'qt/test/moc_apptests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_apptests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_apptests.cpp' object='qt/test/test_bitcoincashII_qt-moc_apptests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_apptests.obj `if test -f 'qt/test/moc_apptests.cpp'; then $(CYGPATH_W) 'qt/test/moc_apptests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_apptests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_apptests.obj `if test -f 'qt/test/moc_apptests.cpp'; then $(CYGPATH_W) 'qt/test/moc_apptests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_apptests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-moc_optiontests.o: qt/test/moc_optiontests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_optiontests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_optiontests.o `test -f 'qt/test/moc_optiontests.cpp' || echo '$(srcdir)/'`qt/test/moc_optiontests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_optiontests.cpp' object='qt/test/test_bitcoinII_qt-moc_optiontests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_optiontests.o: qt/test/moc_optiontests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_optiontests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_optiontests.o `test -f 'qt/test/moc_optiontests.cpp' || echo '$(srcdir)/'`qt/test/moc_optiontests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_optiontests.cpp' object='qt/test/test_bitcoincashII_qt-moc_optiontests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_optiontests.o `test -f 'qt/test/moc_optiontests.cpp' || echo '$(srcdir)/'`qt/test/moc_optiontests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_optiontests.o `test -f 'qt/test/moc_optiontests.cpp' || echo '$(srcdir)/'`qt/test/moc_optiontests.cpp
 
-qt/test/test_bitcoinII_qt-moc_optiontests.obj: qt/test/moc_optiontests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_optiontests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_optiontests.obj `if test -f 'qt/test/moc_optiontests.cpp'; then $(CYGPATH_W) 'qt/test/moc_optiontests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_optiontests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_optiontests.cpp' object='qt/test/test_bitcoinII_qt-moc_optiontests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_optiontests.obj: qt/test/moc_optiontests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_optiontests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_optiontests.obj `if test -f 'qt/test/moc_optiontests.cpp'; then $(CYGPATH_W) 'qt/test/moc_optiontests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_optiontests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_optiontests.cpp' object='qt/test/test_bitcoincashII_qt-moc_optiontests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_optiontests.obj `if test -f 'qt/test/moc_optiontests.cpp'; then $(CYGPATH_W) 'qt/test/moc_optiontests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_optiontests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_optiontests.obj `if test -f 'qt/test/moc_optiontests.cpp'; then $(CYGPATH_W) 'qt/test/moc_optiontests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_optiontests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-moc_rpcnestedtests.o: qt/test/moc_rpcnestedtests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_rpcnestedtests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_rpcnestedtests.o `test -f 'qt/test/moc_rpcnestedtests.cpp' || echo '$(srcdir)/'`qt/test/moc_rpcnestedtests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_rpcnestedtests.cpp' object='qt/test/test_bitcoinII_qt-moc_rpcnestedtests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.o: qt/test/moc_rpcnestedtests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.o `test -f 'qt/test/moc_rpcnestedtests.cpp' || echo '$(srcdir)/'`qt/test/moc_rpcnestedtests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_rpcnestedtests.cpp' object='qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_rpcnestedtests.o `test -f 'qt/test/moc_rpcnestedtests.cpp' || echo '$(srcdir)/'`qt/test/moc_rpcnestedtests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.o `test -f 'qt/test/moc_rpcnestedtests.cpp' || echo '$(srcdir)/'`qt/test/moc_rpcnestedtests.cpp
 
-qt/test/test_bitcoinII_qt-moc_rpcnestedtests.obj: qt/test/moc_rpcnestedtests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_rpcnestedtests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_rpcnestedtests.obj `if test -f 'qt/test/moc_rpcnestedtests.cpp'; then $(CYGPATH_W) 'qt/test/moc_rpcnestedtests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_rpcnestedtests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_rpcnestedtests.cpp' object='qt/test/test_bitcoinII_qt-moc_rpcnestedtests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.obj: qt/test/moc_rpcnestedtests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.obj `if test -f 'qt/test/moc_rpcnestedtests.cpp'; then $(CYGPATH_W) 'qt/test/moc_rpcnestedtests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_rpcnestedtests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_rpcnestedtests.cpp' object='qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_rpcnestedtests.obj `if test -f 'qt/test/moc_rpcnestedtests.cpp'; then $(CYGPATH_W) 'qt/test/moc_rpcnestedtests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_rpcnestedtests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_rpcnestedtests.obj `if test -f 'qt/test/moc_rpcnestedtests.cpp'; then $(CYGPATH_W) 'qt/test/moc_rpcnestedtests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_rpcnestedtests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-moc_uritests.o: qt/test/moc_uritests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_uritests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_uritests.o `test -f 'qt/test/moc_uritests.cpp' || echo '$(srcdir)/'`qt/test/moc_uritests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_uritests.cpp' object='qt/test/test_bitcoinII_qt-moc_uritests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_uritests.o: qt/test/moc_uritests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_uritests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_uritests.o `test -f 'qt/test/moc_uritests.cpp' || echo '$(srcdir)/'`qt/test/moc_uritests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_uritests.cpp' object='qt/test/test_bitcoincashII_qt-moc_uritests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_uritests.o `test -f 'qt/test/moc_uritests.cpp' || echo '$(srcdir)/'`qt/test/moc_uritests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_uritests.o `test -f 'qt/test/moc_uritests.cpp' || echo '$(srcdir)/'`qt/test/moc_uritests.cpp
 
-qt/test/test_bitcoinII_qt-moc_uritests.obj: qt/test/moc_uritests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_uritests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_uritests.obj `if test -f 'qt/test/moc_uritests.cpp'; then $(CYGPATH_W) 'qt/test/moc_uritests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_uritests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_uritests.cpp' object='qt/test/test_bitcoinII_qt-moc_uritests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_uritests.obj: qt/test/moc_uritests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_uritests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_uritests.obj `if test -f 'qt/test/moc_uritests.cpp'; then $(CYGPATH_W) 'qt/test/moc_uritests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_uritests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_uritests.cpp' object='qt/test/test_bitcoincashII_qt-moc_uritests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_uritests.obj `if test -f 'qt/test/moc_uritests.cpp'; then $(CYGPATH_W) 'qt/test/moc_uritests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_uritests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_uritests.obj `if test -f 'qt/test/moc_uritests.cpp'; then $(CYGPATH_W) 'qt/test/moc_uritests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_uritests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-moc_addressbooktests.o: qt/test/moc_addressbooktests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_addressbooktests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_addressbooktests.o `test -f 'qt/test/moc_addressbooktests.cpp' || echo '$(srcdir)/'`qt/test/moc_addressbooktests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_addressbooktests.cpp' object='qt/test/test_bitcoinII_qt-moc_addressbooktests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_addressbooktests.o: qt/test/moc_addressbooktests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_addressbooktests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_addressbooktests.o `test -f 'qt/test/moc_addressbooktests.cpp' || echo '$(srcdir)/'`qt/test/moc_addressbooktests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_addressbooktests.cpp' object='qt/test/test_bitcoincashII_qt-moc_addressbooktests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_addressbooktests.o `test -f 'qt/test/moc_addressbooktests.cpp' || echo '$(srcdir)/'`qt/test/moc_addressbooktests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_addressbooktests.o `test -f 'qt/test/moc_addressbooktests.cpp' || echo '$(srcdir)/'`qt/test/moc_addressbooktests.cpp
 
-qt/test/test_bitcoinII_qt-moc_addressbooktests.obj: qt/test/moc_addressbooktests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_addressbooktests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_addressbooktests.obj `if test -f 'qt/test/moc_addressbooktests.cpp'; then $(CYGPATH_W) 'qt/test/moc_addressbooktests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_addressbooktests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_addressbooktests.cpp' object='qt/test/test_bitcoinII_qt-moc_addressbooktests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_addressbooktests.obj: qt/test/moc_addressbooktests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_addressbooktests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_addressbooktests.obj `if test -f 'qt/test/moc_addressbooktests.cpp'; then $(CYGPATH_W) 'qt/test/moc_addressbooktests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_addressbooktests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_addressbooktests.cpp' object='qt/test/test_bitcoincashII_qt-moc_addressbooktests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_addressbooktests.obj `if test -f 'qt/test/moc_addressbooktests.cpp'; then $(CYGPATH_W) 'qt/test/moc_addressbooktests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_addressbooktests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_addressbooktests.obj `if test -f 'qt/test/moc_addressbooktests.cpp'; then $(CYGPATH_W) 'qt/test/moc_addressbooktests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_addressbooktests.cpp'; fi`
 
-qt/test/test_bitcoinII_qt-moc_wallettests.o: qt/test/moc_wallettests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_wallettests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_wallettests.o `test -f 'qt/test/moc_wallettests.cpp' || echo '$(srcdir)/'`qt/test/moc_wallettests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_wallettests.cpp' object='qt/test/test_bitcoinII_qt-moc_wallettests.o' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_wallettests.o: qt/test/moc_wallettests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_wallettests.o -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_wallettests.o `test -f 'qt/test/moc_wallettests.cpp' || echo '$(srcdir)/'`qt/test/moc_wallettests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_wallettests.cpp' object='qt/test/test_bitcoincashII_qt-moc_wallettests.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_wallettests.o `test -f 'qt/test/moc_wallettests.cpp' || echo '$(srcdir)/'`qt/test/moc_wallettests.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_wallettests.o `test -f 'qt/test/moc_wallettests.cpp' || echo '$(srcdir)/'`qt/test/moc_wallettests.cpp
 
-qt/test/test_bitcoinII_qt-moc_wallettests.obj: qt/test/moc_wallettests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoinII_qt-moc_wallettests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Tpo -c -o qt/test/test_bitcoinII_qt-moc_wallettests.obj `if test -f 'qt/test/moc_wallettests.cpp'; then $(CYGPATH_W) 'qt/test/moc_wallettests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_wallettests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Tpo qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_wallettests.cpp' object='qt/test/test_bitcoinII_qt-moc_wallettests.obj' libtool=no @AMDEPBACKSLASH@
+qt/test/test_bitcoincashII_qt-moc_wallettests.obj: qt/test/moc_wallettests.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -MT qt/test/test_bitcoincashII_qt-moc_wallettests.obj -MD -MP -MF qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Tpo -c -o qt/test/test_bitcoincashII_qt-moc_wallettests.obj `if test -f 'qt/test/moc_wallettests.cpp'; then $(CYGPATH_W) 'qt/test/moc_wallettests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_wallettests.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Tpo qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='qt/test/moc_wallettests.cpp' object='qt/test/test_bitcoincashII_qt-moc_wallettests.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoinII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoinII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoinII_qt-moc_wallettests.obj `if test -f 'qt/test/moc_wallettests.cpp'; then $(CYGPATH_W) 'qt/test/moc_wallettests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_wallettests.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(qt_test_test_bitcoincashII_qt_CPPFLAGS) $(CPPFLAGS) $(qt_test_test_bitcoincashII_qt_CXXFLAGS) $(CXXFLAGS) -c -o qt/test/test_bitcoincashII_qt-moc_wallettests.obj `if test -f 'qt/test/moc_wallettests.cpp'; then $(CYGPATH_W) 'qt/test/moc_wallettests.cpp'; else $(CYGPATH_W) '$(srcdir)/qt/test/moc_wallettests.cpp'; fi`
 
 wallet/test/fuzz/test_fuzz_fuzz-coincontrol.o: wallet/test/fuzz/coincontrol.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_fuzz_fuzz_CPPFLAGS) $(CPPFLAGS) $(test_fuzz_fuzz_CXXFLAGS) $(CXXFLAGS) -MT wallet/test/fuzz/test_fuzz_fuzz-coincontrol.o -MD -MP -MF wallet/test/fuzz/$(DEPDIR)/test_fuzz_fuzz-coincontrol.Tpo -c -o wallet/test/fuzz/test_fuzz_fuzz-coincontrol.o `test -f 'wallet/test/fuzz/coincontrol.cpp' || echo '$(srcdir)/'`wallet/test/fuzz/coincontrol.cpp
@@ -21962,9 +21966,9 @@ univalue/test/unitester.log: univalue/test/unitester$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
-qt/test/test_bitcoinII-qt.log: qt/test/test_bitcoinII-qt$(EXEEXT)
-	@p='qt/test/test_bitcoinII-qt$(EXEEXT)'; \
-	b='qt/test/test_bitcoinII-qt'; \
+qt/test/test_bitcoincashII-qt.log: qt/test/test_bitcoincashII-qt$(EXEEXT)
+	@p='qt/test/test_bitcoincashII-qt$(EXEEXT)'; \
+	b='qt/test/test_bitcoincashII-qt'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -22401,13 +22405,13 @@ distclean: distclean-recursive
 	-rm -f index/$(DEPDIR)/libbitcoinII_node_a-blockfilterindex.Po
 	-rm -f index/$(DEPDIR)/libbitcoinII_node_a-coinstatsindex.Po
 	-rm -f index/$(DEPDIR)/libbitcoinII_node_a-txindex.Po
-	-rm -f init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Po
+	-rm -f init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Po
 	-rm -f init/$(DEPDIR)/bitcoincashII_node-bitcoinII-node.Po
 	-rm -f init/$(DEPDIR)/bitcoincashII_wallet-bitcoinII-wallet.Po
 	-rm -f init/$(DEPDIR)/bitcoincashIId-bitcoinIId.Po
 	-rm -f init/$(DEPDIR)/libbitcoinII_common_a-common.Po
-	-rm -f init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Po
-	-rm -f init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Po
+	-rm -f init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Po
+	-rm -f init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Po
 	-rm -f ipc/$(DEPDIR)/libbitcoinII_ipc_a-interfaces.Po
 	-rm -f ipc/$(DEPDIR)/libbitcoinII_ipc_a-process.Po
 	-rm -f ipc/capnp/$(DEPDIR)/libbitcoinII_ipc_a-echo.capnp.Po
@@ -22548,8 +22552,8 @@ distclean: distclean-recursive
 	-rm -f primitives/$(DEPDIR)/libbitcoinIIconsensus_la-transaction.Plo
 	-rm -f primitives/$(DEPDIR)/libbitcoinIIkernel_la-block.Plo
 	-rm -f primitives/$(DEPDIR)/libbitcoinIIkernel_la-transaction.Plo
-	-rm -f qt/$(DEPDIR)/bitcoinII_gui-main.Po
-	-rm -f qt/$(DEPDIR)/bitcoinII_qt-main.Po
+	-rm -f qt/$(DEPDIR)/bitcoincashII_gui-main.Po
+	-rm -f qt/$(DEPDIR)/bitcoincashII_qt-main.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-addressbookpage.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-addresstablemodel.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-askpassphrasedialog.Po
@@ -22664,20 +22668,20 @@ distclean: distclean-recursive
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-walletmodeltransaction.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-walletview.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-winshutdownmonitor.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Po
 	-rm -f rpc/$(DEPDIR)/libbitcoinII_cli_a-client.Po
 	-rm -f rpc/$(DEPDIR)/libbitcoinII_common_a-external_signer.Po
 	-rm -f rpc/$(DEPDIR)/libbitcoinII_common_a-rawtransaction_util.Po
@@ -23094,7 +23098,7 @@ distclean: distclean-recursive
 	-rm -f wallet/rpc/$(DEPDIR)/libbitcoinII_wallet_a-util.Po
 	-rm -f wallet/rpc/$(DEPDIR)/libbitcoinII_wallet_a-wallet.Po
 	-rm -f wallet/test/$(DEPDIR)/libtest_util_a-util.Po
-	-rm -f wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Po
+	-rm -f wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Po
 	-rm -f wallet/test/$(DEPDIR)/test_test_bitcoinII-coinselector_tests.Po
 	-rm -f wallet/test/$(DEPDIR)/test_test_bitcoinII-db_tests.Po
 	-rm -f wallet/test/$(DEPDIR)/test_test_bitcoinII-feebumper_tests.Po
@@ -23390,13 +23394,13 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f index/$(DEPDIR)/libbitcoinII_node_a-blockfilterindex.Po
 	-rm -f index/$(DEPDIR)/libbitcoinII_node_a-coinstatsindex.Po
 	-rm -f index/$(DEPDIR)/libbitcoinII_node_a-txindex.Po
-	-rm -f init/$(DEPDIR)/bitcoinII_gui-bitcoinII-gui.Po
+	-rm -f init/$(DEPDIR)/bitcoincashII_gui-bitcoincashII-gui.Po
 	-rm -f init/$(DEPDIR)/bitcoincashII_node-bitcoinII-node.Po
 	-rm -f init/$(DEPDIR)/bitcoincashII_wallet-bitcoinII-wallet.Po
 	-rm -f init/$(DEPDIR)/bitcoincashIId-bitcoinIId.Po
 	-rm -f init/$(DEPDIR)/libbitcoinII_common_a-common.Po
-	-rm -f init/$(DEPDIR)/qt_bitcoinII_qt-bitcoinII-qt.Po
-	-rm -f init/$(DEPDIR)/qt_test_test_bitcoinII_qt-bitcoinII-qt.Po
+	-rm -f init/$(DEPDIR)/qt_bitcoincashII_qt-bitcoincashII-qt.Po
+	-rm -f init/$(DEPDIR)/qt_test_test_bitcoincashII_qt-bitcoincashII-qt.Po
 	-rm -f ipc/$(DEPDIR)/libbitcoinII_ipc_a-interfaces.Po
 	-rm -f ipc/$(DEPDIR)/libbitcoinII_ipc_a-process.Po
 	-rm -f ipc/capnp/$(DEPDIR)/libbitcoinII_ipc_a-echo.capnp.Po
@@ -23537,8 +23541,8 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f primitives/$(DEPDIR)/libbitcoinIIconsensus_la-transaction.Plo
 	-rm -f primitives/$(DEPDIR)/libbitcoinIIkernel_la-block.Plo
 	-rm -f primitives/$(DEPDIR)/libbitcoinIIkernel_la-transaction.Plo
-	-rm -f qt/$(DEPDIR)/bitcoinII_gui-main.Po
-	-rm -f qt/$(DEPDIR)/bitcoinII_qt-main.Po
+	-rm -f qt/$(DEPDIR)/bitcoincashII_gui-main.Po
+	-rm -f qt/$(DEPDIR)/bitcoincashII_qt-main.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-addressbookpage.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-addresstablemodel.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-askpassphrasedialog.Po
@@ -23653,20 +23657,20 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-walletmodeltransaction.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-walletview.Po
 	-rm -f qt/$(DEPDIR)/libbitcoinIIqt_a-winshutdownmonitor.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-addressbooktests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-apptests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_addressbooktests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_apptests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_optiontests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_rpcnestedtests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_uritests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-moc_wallettests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-optiontests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-rpcnestedtests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-test_main.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-uritests.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-util.Po
-	-rm -f qt/test/$(DEPDIR)/test_bitcoinII_qt-wallettests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-addressbooktests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-apptests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_addressbooktests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_apptests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_optiontests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_rpcnestedtests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_uritests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-moc_wallettests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-optiontests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-rpcnestedtests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-test_main.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-uritests.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-util.Po
+	-rm -f qt/test/$(DEPDIR)/test_bitcoincashII_qt-wallettests.Po
 	-rm -f rpc/$(DEPDIR)/libbitcoinII_cli_a-client.Po
 	-rm -f rpc/$(DEPDIR)/libbitcoinII_common_a-external_signer.Po
 	-rm -f rpc/$(DEPDIR)/libbitcoinII_common_a-rawtransaction_util.Po
@@ -24083,7 +24087,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f wallet/rpc/$(DEPDIR)/libbitcoinII_wallet_a-util.Po
 	-rm -f wallet/rpc/$(DEPDIR)/libbitcoinII_wallet_a-wallet.Po
 	-rm -f wallet/test/$(DEPDIR)/libtest_util_a-util.Po
-	-rm -f wallet/test/$(DEPDIR)/qt_test_test_bitcoinII_qt-wallet_test_fixture.Po
+	-rm -f wallet/test/$(DEPDIR)/qt_test_test_bitcoincashII_qt-wallet_test_fixture.Po
 	-rm -f wallet/test/$(DEPDIR)/test_test_bitcoinII-coinselector_tests.Po
 	-rm -f wallet/test/$(DEPDIR)/test_test_bitcoinII-db_tests.Po
 	-rm -f wallet/test/$(DEPDIR)/test_test_bitcoinII-feebumper_tests.Po
@@ -24283,7 +24287,7 @@ check-local: check-unit
 # Most files will depend on the forms and moc files as includes. Generate them
 # before anything else.
 @ENABLE_QT_TRUE@$(QT_MOC): $(QT_FORMS_H)
-@ENABLE_QT_TRUE@$(qt_libbitcoinIIqt_a_OBJECTS) $(qt_bitcoinII_qt_OBJECTS) $(bitcoinII_gui_OBJECTS) : | $(QT_MOC)
+@ENABLE_QT_TRUE@$(qt_libbitcoinIIqt_a_OBJECTS) $(qt_bitcoincashII_qt_OBJECTS) $(bitcoincashII_gui_OBJECTS) : | $(QT_MOC)
 
 @ENABLE_QT_TRUE@SECONDARY: $(QT_QM)
 
@@ -24314,17 +24318,17 @@ check-local: check-unit
 @ENABLE_QT_TRUE@	@test -f $(RCC) || (echo "rcc $(RCC) not found, but is required for generating qrc cpp files"; exit 1)
 @ENABLE_QT_TRUE@	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name bitcoinII --format-version 1 $< > $@
 
-@ENABLE_QT_TRUE@bitcoinII_qt_clean: FORCE
-@ENABLE_QT_TRUE@	rm -f $(CLEAN_QT) $(qt_libbitcoinIIqt_a_OBJECTS) $(qt_bitcoinII_qt_OBJECTS) qt/bitcoinII-qt$(EXEEXT) $(LIBBITCOINIIQT)
+@ENABLE_QT_TRUE@bitcoincashII_qt_clean: FORCE
+@ENABLE_QT_TRUE@	rm -f $(CLEAN_QT) $(qt_libbitcoinIIqt_a_OBJECTS) $(qt_bitcoincashII_qt_OBJECTS) qt/bitcoincashII-qt$(EXEEXT) $(LIBBITCOINIIQT)
 
-@ENABLE_QT_TRUE@bitcoinII_qt : qt/bitcoinII-qt$(EXEEXT)
+@ENABLE_QT_TRUE@bitcoincashII_qt : qt/bitcoincashII-qt$(EXEEXT)
 
-@ENABLE_QT_TRUE@bitcoinII_qt_apk: FORCE
+@ENABLE_QT_TRUE@bitcoincashII_qt_apk: FORCE
 @ENABLE_QT_TRUE@	mkdir -p $(APK_LIB_DIR)
 @ENABLE_QT_TRUE@	cp $(dir $(lastword $(CC)))../sysroot/usr/lib/$(host_alias)/libc++_shared.so $(APK_LIB_DIR)
 @ENABLE_QT_TRUE@	tar xf $(QT_BASE_PATH) -C qt/android/src/ $(QT_BASE_TLD)src/android/jar/src --strip-components=5
 @ENABLE_QT_TRUE@	tar xf $(QT_BASE_PATH) -C qt/android/src/ $(QT_BASE_TLD)src/android/java/src --strip-components=5
-@ENABLE_QT_TRUE@	cp qt/bitcoinII-qt $(APK_LIB_DIR)/libbitcoinII-qt_$(ANDROID_ARCH).so
+@ENABLE_QT_TRUE@	cp qt/bitcoincashII-qt $(APK_LIB_DIR)/libbitcoincashII-qt_$(ANDROID_ARCH).so
 @ENABLE_QT_TRUE@	cd qt/android && gradle wrapper --gradle-version=6.6.1
 @ENABLE_QT_TRUE@	cd qt/android && ./gradlew build
 
@@ -24344,13 +24348,13 @@ check-local: check-unit
 @ENABLE_QT_TRUE@	@$(MKDIR_P) $(@D)
 @ENABLE_QT_TRUE@	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LRELEASE) -silent $< -qm $@
 
-@ENABLE_QT_TESTS_TRUE@test_bitcoinII_qt : qt/test/test_bitcoinII-qt$(EXEEXT)
+@ENABLE_QT_TESTS_TRUE@test_bitcoincashII_qt : qt/test/test_bitcoincashII-qt$(EXEEXT)
 
-@ENABLE_QT_TESTS_TRUE@test_bitcoinII_qt_check : qt/test/test_bitcoinII-qt$(EXEEXT) FORCE
+@ENABLE_QT_TESTS_TRUE@test_bitcoincashII_qt_check : qt/test/test_bitcoincashII-qt$(EXEEXT) FORCE
 @ENABLE_QT_TESTS_TRUE@	$(MAKE) check-TESTS TESTS=$^
 
-@ENABLE_QT_TESTS_TRUE@test_bitcoinII_qt_clean: FORCE
-@ENABLE_QT_TESTS_TRUE@	rm -f $(CLEAN_BITCOINII_QT_TEST) $(qt_test_test_bitcoinII_qt_OBJECTS)
+@ENABLE_QT_TESTS_TRUE@test_bitcoincashII_qt_clean: FORCE
+@ENABLE_QT_TESTS_TRUE@	rm -f $(CLEAN_BITCOINII_QT_TEST) $(qt_test_test_bitcoincashII_qt_OBJECTS)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
