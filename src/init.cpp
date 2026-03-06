@@ -157,7 +157,7 @@ static const char* DEFAULT_ASMAP_FILENAME="ip_asn.map";
 /**
  * The PID file facilities.
  */
-static const char* BITCOINII_PID_FILENAME = "bitcoinIId.pid";
+static const char* BITCOINII_PID_FILENAME = "bitcoincashIId.pid";
 /**
  * True if this process has created a PID file.
  * Used to determine whether we should remove the PID file on shutdown.

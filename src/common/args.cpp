@@ -38,7 +38,7 @@
 #include <utility>
 #include <variant>
 
-const char * const BITCOINII_CONF_FILENAME = "bitcoinII.conf";
+const char * const BITCOINII_CONF_FILENAME = "bitcoincashII.conf";
 const char * const BITCOINII_SETTINGS_FILENAME = "settings.json";
 
 ArgsManager gArgs;
@@ -691,10 +691,10 @@ fs::path GetDefaultDataDir()
 {
     // Windows: C:\Users\Username\AppData\Roaming\Bitcoin Cash II
     // macOS: ~/Library/Application Support/Bitcoin Cash II
-    // Unix-like: ~/.bch2
+    // Unix-like: ~/.bitcoincashII
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Bitcoin Cash II";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "BitcoinCashII";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -704,10 +704,10 @@ fs::path GetDefaultDataDir()
         pathRet = fs::path(pszHome);
 #ifdef MAC_OSX
     // macOS
-    return pathRet / "Library/Application Support/Bitcoin Cash II";
+    return pathRet / "Library/Application Support/BitcoinCashII";
 #else
     // Unix-like
-    return pathRet / ".bch2";
+    return pathRet / ".bitcoincashII";
 #endif
 #endif
 }

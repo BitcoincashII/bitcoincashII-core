@@ -78,7 +78,7 @@ class TestNode():
         self.index = i
         self.p2p_conn_index = 1
         self.datadir_path = datadir_path
-        self.bitcoinIIconf = self.datadir_path / "bitcoinII.conf"
+        self.bitcoinIIconf = self.datadir_path / "bitcoincashII.conf"
         self.stdout_dir = self.datadir_path / "stdout"
         self.stderr_dir = self.datadir_path / "stderr"
         self.chain = chain
