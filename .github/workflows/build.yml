@@ -17,7 +17,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          build-essential libtool autotools-dev automake pkg-config \
+          build-essential libtool autotools-dev automake pkgconf \
           bsdmainutils python3 libevent-dev libboost-dev libsqlite3-dev \
           libminiupnpc-dev libnatpmp-dev libzmq3-dev systemtap-sdt-dev
 
