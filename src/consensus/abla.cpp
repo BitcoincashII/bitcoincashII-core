@@ -22,7 +22,12 @@ struct u128 : arith_uint256 {
 
 #include <consensus/abla.h>
 
+#ifdef BUILD_BITCOINII_INTERNAL
+// Stub out logging when building as part of the standalone consensus library
+#define LogPrint(...)
+#else
 #include <logging.h>
+#endif
 #include <tinyformat.h>
 #include <util/defer.h>
 
