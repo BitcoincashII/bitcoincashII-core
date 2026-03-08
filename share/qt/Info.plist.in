@@ -43,7 +43,7 @@
   <true/>
 
   <key>CFBundleIdentifier</key>
-  <string>org.bitcoinIIfoundation.Bitcoin-Qt</string>
+  <string>org.bitcoincashII.BitcoinCashII-Qt</string>
 
   <key>CFBundleURLTypes</key>
   <array>
@@ -51,10 +51,10 @@
       <key>CFBundleTypeRole</key>
       <string>Editor</string>
       <key>CFBundleURLName</key>
-      <string>org.bitcoinII.BitcoinPayment</string>
+      <string>org.bitcoincashII.BitcoinCashIIPayment</string>
       <key>CFBundleURLSchemes</key>
       <array>
-        <string>bitcoinII</string>
+        <string>bitcoincashii</string>
       </array>
     </dict>
   </array>
