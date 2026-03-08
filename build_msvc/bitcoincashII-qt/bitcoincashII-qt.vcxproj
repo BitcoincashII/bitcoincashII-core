@@ -9,8 +9,8 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\qt\main.cpp" />
-    <ClCompile Include="..\..\src\init\bitcoinII-qt.cpp" />
-    <ResourceCompile Include="..\..\src\qt\res\bitcoinII-qt-res.rc" />
+    <ClCompile Include="..\..\src\init\bitcoincashII-qt.cpp" />
+    <ResourceCompile Include="..\..\src\qt\res\bitcoincashII-qt-res.rc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libbitcoinII_consensus\libbitcoinII_consensus.vcxproj">

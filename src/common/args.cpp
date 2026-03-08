@@ -690,11 +690,11 @@ std::string HelpMessageOpt(const std::string &option, const std::string &message
 fs::path GetDefaultDataDir()
 {
     // Windows: C:\Users\Username\AppData\Roaming\Bitcoin Cash II
-    // macOS: ~/Library/Application Support/Bitcoin Cash II
+    // macOS: ~/Library/Application Support/BitcoinCashII
     // Unix-like: ~/.bitcoincashII
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "BitcoinCashII";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Bitcoin Cash II";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -704,7 +704,7 @@ fs::path GetDefaultDataDir()
         pathRet = fs::path(pszHome);
 #ifdef MAC_OSX
     // macOS
-    return pathRet / "Library/Application Support/BitcoinCashII";
+    return pathRet / "Library/Application Support/Bitcoin Cash II";
 #else
     // Unix-like
     return pathRet / ".bitcoincashII";

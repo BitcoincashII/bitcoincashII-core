@@ -1,4 +1,4 @@
-# bash programmable completion for bitcoinIId(1) and bitcoinII-qt(1)
+# bash programmable completion for bitcoincashIId(1) and bitcoincashII-qt(1)
 # Copyright (c) 2012-2022 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -45,7 +45,7 @@ _bitcoinIId() {
             ;;
     esac
 } &&
-complete -F _bitcoinIId bitcoinIId bitcoinII-qt
+complete -F _bitcoinIId bitcoinIId bitcoincashII-qt
 
 # Local variables:
 # mode: shell-script

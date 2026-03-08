@@ -8,7 +8,7 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\init\bitcoinII-qt.cpp" />
+    <ClCompile Include="..\..\src\init\bitcoincashII-qt.cpp" />
     <ClCompile Include="..\..\src\qt\test\addressbooktests.cpp" />
     <ClCompile Include="..\..\src\qt\test\apptests.cpp" />
     <ClCompile Include="..\..\src\qt\test\optiontests.cpp" />
@@ -98,14 +98,14 @@
   </ItemGroup>
   <Target Name="moccode" Inputs="@(MocTestFiles)" Outputs="@(MocTestFiles->'$(GeneratedFilesOutDir)\moc\moc_%(Filename).cpp')">
     <PropertyGroup>
-      <ErrorText>There was an error executing the test_bitcoinII-qt moc code generation task.</ErrorText>
+      <ErrorText>There was an error executing the test_bitcoincashII-qt moc code generation task.</ErrorText>
     </PropertyGroup>
-    <Exec Command="echo Performing test_bitcoinII-qt moc generation task, output path $(GeneratedFilesOutDir)\moc." />
+    <Exec Command="echo Performing test_bitcoincashII-qt moc generation task, output path $(GeneratedFilesOutDir)\moc." />
     <MakeDir Directories="$(GeneratedFilesOutDir)\moc\" />
     <Exec Command="$(QtToolsDir)\moc.exe $(MOC_DEFINES) &quot;%(MocTestFiles.Identity)&quot; -o $(GeneratedFilesOutDir)\moc\moc_%(Filename).cpp" />
   </Target>
   <Target Name="QtTestCleanGeneratedFiles">
-    <Exec Command="echo Clean test_bitcoinII-qt generated files from $(GeneratedFilesOutDir)." />
+    <Exec Command="echo Clean test_bitcoincashII-qt generated files from $(GeneratedFilesOutDir)." />
     <RemoveDir Directories="$(GeneratedFilesOutDir)\moc\*" />
     <RemoveDir Directories="$(GeneratedFilesOutDir)\moc" />
   </Target>

@@ -115,8 +115,6 @@ void CSeederNode::PushVersion() {
 
 PeerMessagingState CSeederNode::ProcessMessage(const std::string &msg_type,
                                                DataStream &recv) {
-    // std::fprintf(stdout, "%s: RECV %s\n", ToString(you).c_str(),
-    //              msg_type.c_str());
     if (msg_type == NetMsgType::VERSION) {
         int64_t nTime;
         uint64_t nNonce = 1;
@@ -221,28 +219,23 @@ PeerMessagingState CSeederNode::ProcessMessage(const std::string &msg_type,
     if (msg_type == NetMsgType::HEADERS) {
         unsigned int nCount = ReadCompactSize(recv);
         if (nCount > MAX_HEADERS_RESULTS) {
-            // std::fprintf(stdout, "%s: BAD \"%s\" (too many headers)\n",
-            //              ToString(you).c_str(), strSubVer.c_str());
             ban = 100000;
             return PeerMessagingState::Finished;
+        }
+
+        if (nCount == 0) {
+            return PeerMessagingState::AwaitingMessages;
         }
 
         CBlockHeader header;
         recv >> header;
 
         if (auto *pair = GetCheckpoint(); pair && nStartingHeight > pair->first && header.hashPrevBlock != pair->second) {
-            /* This node is synced higher than the last checkpoint height but does not have the checkpoint block in
-             * its chain. This means it must be on the wrong chain. We treat these nodes the same as nodes with
-             * the wrong net magic.
-             */
-            // std::fprintf(stdout, "%s: BAD \"%s\" (wrong chain)\n",
-            //              ToString(you).c_str(), strSubVer.c_str());
             ban = 100000;
             return PeerMessagingState::Finished;
         }
         checkpointVerified = true;
         if (!needAddrReply) {
-            // we are no longer waiting for headers or addr, so we can stop processing this node
             doneAfter = now;
         }
         return PeerMessagingState::AwaitingMessages;
@@ -301,8 +294,12 @@ bool CSeederNode::ProcessMessages() {
             return true;
         }
         if (nMessageSize > vRecv.size()) {
-            // Put the header back
-            vRecv = DataStream(Span<const std::byte>{vHeaderSave});
+            // Put the header back, preserving any partial payload already received
+            std::vector<std::byte> saved(vHeaderSave);
+            if (vRecv.size() > 0) {
+                saved.insert(saved.end(), vRecv.data(), vRecv.data() + vRecv.size());
+            }
+            vRecv = DataStream(Span<const std::byte>{saved});
             break;
         }
         // Verify checksum
@@ -385,7 +382,7 @@ bool CSeederNode::Run() {
     }
 
     if (!connected) {
-        // std::fprintf(stdout, "Cannot connect to %s\n", ToString(you).c_str());
+        std::fprintf(stdout, "Cannot connect to %s\n", you.ToStringAddrPort().c_str());
         sock.reset();
         return false;
     }
@@ -411,14 +408,7 @@ bool CSeederNode::Run() {
         const ssize_t nBytes = sock->Recv(pchBuf, sizeof(pchBuf), 0);
         if (nBytes > 0) {
             vRecv.write(MakeByteSpan(Span<char>(pchBuf, nBytes)));
-        } else if (nBytes == 0) {
-            // std::fprintf(stdout, "%s: BAD (connection closed prematurely)\n",
-            //              ToString(you).c_str());
-            res = false;
-            break;
         } else {
-            // std::fprintf(stdout, "%s: BAD (connection error)\n",
-            //              ToString(you).c_str());
             res = false;
             break;
         }
@@ -449,10 +439,13 @@ bool TestNode(const CService &cip, int &ban, int &clientV,
         blocks = node.GetStartingHeight();
         services = node.GetServices();
         checkpointVerified = node.IsCheckpointVerified();
-        // std::fprintf(stdout, "%s: %s!!!\n", cip.ToStringAddrPort().c_str(), ret ? "GOOD" :
-        //              "BAD");
+        std::fprintf(stdout, "%s: %s (ver=%d, blocks=%d, svcs=0x%x, chkpt=%s, ban=%d)\n",
+                     cip.ToStringAddrPort().c_str(), ret ? "GOOD" : "BAD",
+                     clientV, blocks, (unsigned)services,
+                     checkpointVerified ? "yes" : "no", ban);
         return ret;
     } catch (std::ios_base::failure &e) {
+        std::fprintf(stdout, "%s: EXCEPTION %s\n", cip.ToStringAddrPort().c_str(), e.what());
         ban = 0;
         return false;
     }

@@ -152,9 +152,8 @@ public:
 
     // Return the first detected reason a node is unreliable or `OK` if no reason found
     Reliableness GetReliableness() const {
-        if (ip.GetPort() != GetDefaultPort()) {
-            return Reliableness::NONSTANDARD_PORT;
-        }
+        // BCH2: allow non-standard ports since the seeder already validates
+        // full protocol handshake + checkpoint verification before accepting
         if (!(services & NODE_NETWORK)) {
             return Reliableness::NOT_NODE_NETWORK;
         }

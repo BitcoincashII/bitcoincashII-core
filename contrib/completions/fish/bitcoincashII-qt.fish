@@ -1,8 +1,8 @@
 # Disable files from being included in completions by default
-complete --command bitcoinII-qt --no-files
+complete --command bitcoincashII-qt --no-files
 
 # Extract options
-function __fish_bitcoinIIqt_get_options
+function __fish_bitcoincashIIqt_get_options
     argparse 'nofiles' -- $argv
     set --local cmd (commandline -opc)[1]
     set --local options
@@ -21,15 +21,15 @@ end
 
 # Add options with file completion
 complete \
-    --command bitcoinII-qt \
-    --arguments "(__fish_bitcoinIIqt_get_options)"
+    --command bitcoincashII-qt \
+    --arguments "(__fish_bitcoincashIIqt_get_options)"
 # Enable file completions only if the commandline now contains a `*.=` style option
-complete -c bitcoinII-qt \
+complete -c bitcoincashII-qt \
     --condition 'string match --regex -- ".*=" (commandline -pt)' \
     --force-files
 
 # Add options without file completion
 complete \
-    --command bitcoinII-qt \
-    --arguments "(__fish_bitcoinIIqt_get_options --nofiles)"
+    --command bitcoincashII-qt \
+    --arguments "(__fish_bitcoincashIIqt_get_options --nofiles)"
 

@@ -75,6 +75,10 @@ QValidator::State BitcoinIIAddressEntryValidator::validate(QString &input, int &
         {
             // Alphanumeric and not a 'forbidden' character
         }
+        else if (ch == ':') // CashAddr separator (bitcoincashii:q...)
+        {
+            // Allow colon for CashAddr prefix
+        }
         else
         {
             state = QValidator::Invalid;

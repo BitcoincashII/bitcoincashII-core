@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     #endif
 
     BitcoinIIApplication app;
-    app.setApplicationName("BitcoinII-Qt-test");
+    app.setApplicationName("BitcoinCashII-Qt-test");
     app.createNode(*init);
 
     int num_test_failures{0};
