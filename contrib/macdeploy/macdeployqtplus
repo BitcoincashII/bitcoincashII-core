@@ -147,7 +147,7 @@ class ApplicationBundleInfo(object):
         self.path = path
         # Find the actual binary inside the bundle
         macos_dir = os.path.join(path, "Contents", "MacOS")
-        self.binaryPath = os.path.join(macos_dir, "BitcoinII-Qt")
+        self.binaryPath = os.path.join(macos_dir, "BitcoinCashII-Qt")
         if not os.path.exists(self.binaryPath):
             self.binaryPath = os.path.join(macos_dir, "Bitcoin-Qt")
         if not os.path.exists(self.binaryPath):

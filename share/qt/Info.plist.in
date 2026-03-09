@@ -34,7 +34,7 @@
   <string>????</string>
 
   <key>CFBundleExecutable</key>
-  <string>BitcoinII-Qt</string>
+  <string>BitcoinCashII-Qt</string>
 
   <key>CFBundleName</key>
   <string>Bitcoin Cash II</string>

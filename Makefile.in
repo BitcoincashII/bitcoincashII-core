@@ -598,7 +598,7 @@ BITCOINII_GUI_BIN = $(top_builddir)/src/$(BITCOINII_MP_GUI_NAME)$(EXEEXT)
 BITCOINII_WIN_INSTALLER = $(PACKAGE)-$(PACKAGE_VERSION)-win64-setup$(EXEEXT)
 empty := 
 space := $(empty) $(empty)
-OSX_APP = BitcoinII-Qt.app
+OSX_APP = BitcoinCashII-Qt.app
 OSX_VOLNAME = $(subst $(space),-,$(PACKAGE_NAME))
 OSX_ZIP = $(OSX_VOLNAME).zip
 OSX_DEPLOY_SCRIPT = $(top_srcdir)/contrib/macdeploy/macdeployqtplus
@@ -635,7 +635,7 @@ COVERAGE_INFO = $(COV_TOOL_WRAPPER) baseline.info \
 
 @TARGET_DARWIN_TRUE@OSX_APP_BUILT = $(OSX_APP)/Contents/PkgInfo $(OSX_APP)/Contents/Resources/empty.lproj \
 @TARGET_DARWIN_TRUE@  $(OSX_APP)/Contents/Resources/bch2.icns $(OSX_APP)/Contents/Info.plist \
-@TARGET_DARWIN_TRUE@  $(OSX_APP)/Contents/MacOS/BitcoinII-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings
+@TARGET_DARWIN_TRUE@  $(OSX_APP)/Contents/MacOS/BitcoinCashII-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings
 
 @BUILD_DARWIN_FALSE@@TARGET_DARWIN_TRUE@APP_DIST_DIR = $(top_builddir)/dist
 @USE_LCOV_TRUE@LCOV_FILTER_PATTERN = \
@@ -1281,7 +1281,7 @@ dist-hook:
 @TARGET_DARWIN_TRUE@	$(MKDIR_P) $(@D)
 @TARGET_DARWIN_TRUE@	$(INSTALL_DATA) $< $@
 
-@TARGET_DARWIN_TRUE@$(OSX_APP)/Contents/MacOS/BitcoinII-Qt: all-recursive
+@TARGET_DARWIN_TRUE@$(OSX_APP)/Contents/MacOS/BitcoinCashII-Qt: all-recursive
 @TARGET_DARWIN_TRUE@	$(MKDIR_P) $(@D)
 @TARGET_DARWIN_TRUE@	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $(BITCOINII_QT_BIN) $@
 
@@ -1301,10 +1301,10 @@ dist-hook:
 @BUILD_DARWIN_FALSE@@TARGET_DARWIN_TRUE@	if [ -n "$(SOURCE_DATE_EPOCH)" ]; then find $(APP_DIST_DIR) -exec touch -d @$(SOURCE_DATE_EPOCH) {} +; fi
 @BUILD_DARWIN_FALSE@@TARGET_DARWIN_TRUE@	cd $(APP_DIST_DIR) && find . | sort | $(ZIP) -X@ $@
 
-@BUILD_DARWIN_FALSE@@TARGET_DARWIN_TRUE@$(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/BitcoinII-Qt: $(OSX_APP_BUILT) $(OSX_PACKAGING)
+@BUILD_DARWIN_FALSE@@TARGET_DARWIN_TRUE@$(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/BitcoinCashII-Qt: $(OSX_APP_BUILT) $(OSX_PACKAGING)
 @BUILD_DARWIN_FALSE@@TARGET_DARWIN_TRUE@	INSTALL_NAME_TOOL=$(INSTALL_NAME_TOOL) OTOOL=$(OTOOL) STRIP=$(STRIP) $(PYTHON) $(OSX_DEPLOY_SCRIPT) $(OSX_APP) $(OSX_VOLNAME) -translations-dir=$(QT_TRANSLATION_DIR)
 
-@BUILD_DARWIN_FALSE@@TARGET_DARWIN_TRUE@deploydir: $(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/BitcoinII-Qt
+@BUILD_DARWIN_FALSE@@TARGET_DARWIN_TRUE@deploydir: $(APP_DIST_DIR)/$(OSX_APP)/Contents/MacOS/BitcoinCashII-Qt
 
 @TARGET_DARWIN_TRUE@deploy: $(OSX_ZIP)
 
