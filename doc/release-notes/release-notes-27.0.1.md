@@ -69,7 +69,12 @@ required.
 1. Download the new binaries for your platform
 2. Stop your node: `bitcoincashII-cli stop`
 3. Replace the binaries (`bitcoincashIId`, `bitcoincashII-cli`, `bitcoincashII-qt`)
-4. Start your node: `bitcoincashIId`
+4. **Rename your config file** if it is named `bitcoinII.conf` — the v27.0.1 binary expects
+   `bitcoincashII.conf` (matching the binary name). Rename it:
+   - Linux/macOS: `mv ~/.bitcoincashII/bitcoinII.conf ~/.bitcoincashII/bitcoincashII.conf`
+   - Windows: rename `bitcoinII.conf` to `bitcoincashII.conf` in your data directory
+   - If your config file is already named `bitcoincashII.conf`, no action is needed
+5. Start your node: `bitcoincashIId`
 
 ---
 
@@ -77,7 +82,9 @@ required.
 
 - Bitcoin Cash II Core v27.0.1 is compatible with all existing chain data
 - No reindex required
-- No configuration changes needed
+- **Configuration file name**: the expected config filename is now `bitcoincashII.conf`
+  (matching the binary name). If you are using `bitcoinII.conf` from v27.0.0, rename it
+  or the node will start with default settings and may not read your custom configuration
 - Wire format for existing (non-token) transactions is unchanged
 - Nodes running v27.0.0 will continue to sync the existing chain but will reject blocks
   containing CashToken transactions after this upgrade is deployed
