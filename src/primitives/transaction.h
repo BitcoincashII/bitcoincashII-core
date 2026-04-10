@@ -173,17 +173,18 @@ public:
     void Serialize(Stream& s) const {
         s << nValue;
         if (tokenData) {
-            // Serialize with token prefix: write scriptPubKey length + token data,
-            // then prefix byte, token data, then actual scriptPubKey
-            std::vector<unsigned char> tokenSerialized;
-            VectorWriter tokenWriter(tokenSerialized, 0);
-            tokenData->Serialize(tokenWriter);
+            // Build combined blob: 0xEF prefix + serialized token data + scriptPubKey
+            // Then serialize as a CScript (CompactSize length + bytes)
+            std::vector<unsigned char> tokenBytes;
+            VectorWriter tw(tokenBytes, 0);
+            tokenData->Serialize(tw);
 
-            // Total length = 1 (prefix) + token data + scriptPubKey
-            WriteCompactSize(s, 1 + tokenSerialized.size() + scriptPubKey.size());
-            s << static_cast<uint8_t>(SPECIAL_TOKEN_PREFIX);
-            s.write(MakeByteSpan(tokenSerialized));
-            s.write(MakeByteSpan(scriptPubKey));
+            CScript combined;
+            combined.reserve(1 + tokenBytes.size() + scriptPubKey.size());
+            combined.push_back(static_cast<unsigned char>(SPECIAL_TOKEN_PREFIX));
+            combined.insert(combined.end(), tokenBytes.begin(), tokenBytes.end());
+            combined.insert(combined.end(), scriptPubKey.begin(), scriptPubKey.end());
+            s << combined;
         } else {
             s << scriptPubKey;
         }
@@ -192,31 +193,23 @@ public:
     template <typename Stream>
     void Unserialize(Stream& s) {
         s >> nValue;
-        // Read the script/token data
-        uint64_t scriptLen = ReadCompactSize(s);
-        if (scriptLen > 0) {
-            std::vector<unsigned char> data(scriptLen);
-            s.read(MakeWritableByteSpan(data));
+        // Read the combined script blob (may contain token prefix + token data + real script)
+        CScript combined;
+        s >> combined;
 
-            // Check for token prefix
-            if (data[0] == SPECIAL_TOKEN_PREFIX && scriptLen > 1) {
-                // Parse token data
-                SpanReader tokenReader(data);
-                tokenReader.ignore(1); // Skip prefix byte
-                OutputToken token;
-                token.Unserialize(tokenReader);
-                tokenData.emplace(std::move(token));
+        if (!combined.empty() && combined[0] == SPECIAL_TOKEN_PREFIX && combined.size() > 1) {
+            // Token-bearing output: parse token data from after the prefix byte
+            SpanReader reader({combined.data() + 1, combined.size() - 1});
+            OutputToken token;
+            token.Unserialize(reader);
+            tokenData.emplace(std::move(token));
 
-                // Remaining bytes are the scriptPubKey
-                size_t remaining = tokenReader.size();
-                scriptPubKey.assign(data.end() - remaining, data.end());
-            } else {
-                // No token, entire data is scriptPubKey
-                scriptPubKey.assign(data.begin(), data.end());
-                tokenData.reset();
-            }
+            // Remaining bytes are the real scriptPubKey
+            size_t remaining = reader.size();
+            scriptPubKey.assign(combined.end() - remaining, combined.end());
         } else {
-            scriptPubKey.clear();
+            // No token prefix, entire blob is the scriptPubKey
+            scriptPubKey = std::move(combined);
             tokenData.reset();
         }
     }

@@ -256,6 +256,30 @@ void TxToUniv(const CTransaction& tx, const uint256& block_hash, UniValue& entry
         UniValue o(UniValue::VOBJ);
         ScriptToUniv(txout.scriptPubKey, /*out=*/o, /*include_hex=*/true, /*include_address=*/true);
         out.pushKV("scriptPubKey", o);
+
+        // CashToken data (CHIP-2022-02)
+        if (txout.HasTokenData()) {
+            const OutputToken* token = txout.GetTokenData();
+            UniValue tokenObj(UniValue::VOBJ);
+            tokenObj.pushKV("category", token->categoryId.GetHex());
+            if (token->HasAmount()) {
+                tokenObj.pushKV("amount", token->amount);
+            }
+            if (token->HasNFT()) {
+                UniValue nftObj(UniValue::VOBJ);
+                switch (token->GetCapability()) {
+                    case token::None: nftObj.pushKV("capability", "none"); break;
+                    case token::Mutable: nftObj.pushKV("capability", "mutable"); break;
+                    case token::Minting: nftObj.pushKV("capability", "minting"); break;
+                }
+                if (token->HasCommitment()) {
+                    nftObj.pushKV("commitment", HexStr(token->commitment));
+                }
+                tokenObj.pushKV("nft", nftObj);
+            }
+            out.pushKV("tokenData", tokenObj);
+        }
+
         vout.push_back(out);
 
         if (have_undo) {

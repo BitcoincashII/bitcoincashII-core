@@ -1025,13 +1025,12 @@ BOOST_AUTO_TEST_CASE(asert_anchor_invalid_negative_time)
 BOOST_AUTO_TEST_CASE(mainnet_asert_anchor_has_value)
 {
     const auto& c = Params().GetConsensus();
-    // Mainnet anchor is set but nPrevBlockTime=0 (pre-launch placeholder)
+    // Mainnet ASERT anchor: block 53201 (first BCH2 block), parent time from block 53200
     BOOST_CHECK(c.asertAnchorParams.has_value());
     BOOST_CHECK_EQUAL(c.asertAnchorParams->nHeight, 53201);
     BOOST_CHECK_EQUAL(c.asertAnchorParams->nBits, 0x1903a30c);
-    // nPrevBlockTime=0 is a pre-launch TODO, so IsValid() returns false
-    BOOST_CHECK_EQUAL(c.asertAnchorParams->nPrevBlockTime, 0);
-    BOOST_CHECK(!c.asertAnchorParams->IsValid());
+    BOOST_CHECK_EQUAL(c.asertAnchorParams->nPrevBlockTime, 1772649180);
+    BOOST_CHECK(c.asertAnchorParams->IsValid());
 }
 
 BOOST_AUTO_TEST_CASE(regtest_asert_anchor_has_value)

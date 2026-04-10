@@ -166,6 +166,18 @@ public:
     void Unserialize(Stream& s) {
         s >> categoryId;
         s >> bitfield;
+
+        // Validate bitfield immediately after reading
+        if (bitfield & token::BitfieldFlag::Reserved) {
+            throw std::ios_base::failure("Token bitfield has reserved bit set");
+        }
+        if (!HasNFT() && (bitfield & token::BitfieldFlag::CapabilityMask)) {
+            throw std::ios_base::failure("Token bitfield has capability without NFT flag");
+        }
+        if (HasNFT() && GetCapability() > token::Minting) {
+            throw std::ios_base::failure("Token bitfield has invalid NFT capability");
+        }
+
         if (HasCommitment()) {
             size_t commitLen = ReadCompactSize(s);
             if (commitLen > token::MAX_COMMITMENT_LENGTH) {
@@ -177,10 +189,11 @@ public:
             commitment.clear();
         }
         if (HasAmount()) {
-            amount = static_cast<int64_t>(ReadCompactSize(s));
-            if (amount <= 0 || amount > token::MAX_AMOUNT) {
+            uint64_t rawAmount = ReadCompactSize(s, false);
+            if (rawAmount == 0 || rawAmount > static_cast<uint64_t>(token::MAX_AMOUNT)) {
                 throw std::ios_base::failure("Invalid token amount");
             }
+            amount = static_cast<int64_t>(rawAmount);
         } else {
             amount = 0;
         }
