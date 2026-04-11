@@ -13,21 +13,21 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install dependencies
+    - name: Install base build tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y \
-          build-essential libtool autotools-dev automake pkgconf \
-          bsdmainutils python3 libevent-dev libboost-dev libsqlite3-dev \
-          libminiupnpc-dev libnatpmp-dev libzmq3-dev systemtap-sdt-dev
+        sudo apt-get install -y build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 curl cmake
+
+    - name: Build depends
+      run: make -C depends -j$(nproc) NO_QT=1
 
     - name: Autogen
       run: ./autogen.sh
 
     - name: Configure
       run: |
-        mkdir build && cd build
-        ../configure --without-gui --disable-tests --disable-bench
+        mkdir -p build && cd build
+        CONFIG_SITE=$PWD/../depends/x86_64-pc-linux-gnu/share/config.site ../configure --without-gui --disable-tests --disable-bench
 
     - name: Build
       run: make -C build -j$(nproc)
