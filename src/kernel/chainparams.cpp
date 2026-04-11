@@ -164,10 +164,10 @@ public:
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
 
-        // Chainwork at block 58000 — protects against low-work forks
-        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000b85b73ac926169155ede");
-        // Block 58000 — skip script verification for blocks up to this hash
-        consensus.defaultAssumeValid = uint256S("0x00000000000000016845009a1a5f63a9b3fd0192baaa9573f3faeed8f7b089f6");
+        // Chainwork at block 58657 — protects against low-work forks
+        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000b97d29188116d332f173");
+        // Block 58657 — skip script verification for blocks up to this hash
+        consensus.defaultAssumeValid = uint256S("0x0000000000000003821669141aaa9f95f7c5ad944bb532a67077f7ed8f2d84f2");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -243,6 +243,12 @@ public:
                 { 56000, uint256S("0x00000000000000011da17edb389abddc91e9e75a059ba0c9084235e2265d040e")},
                 { 57000, uint256S("0x00000000000000003e72cecccb8920fd6660afc3f81118e86e9a57dffdba22a1")},
                 { 58000, uint256S("0x00000000000000016845009a1a5f63a9b3fd0192baaa9573f3faeed8f7b089f6")},
+                // v27.0.2: Checkpoints to protect against the deep reorg at block 58594
+                { 58595, uint256S("0x0000000000000001481cd824d3b6339488608b6c95b82edad70b89ad1387dacf")},
+                { 58600, uint256S("0x00000000000000007c50e6678f05adeade78a23d3c4f6656041676f97dda595f")},
+                { 58620, uint256S("0x0000000000000001d805e5767d36c65c7cd36255cd4e4f6a3028319fd46a5771")},
+                { 58640, uint256S("0x000000000000000266dab048cc14df2c5dcd4a36b5a70882583c5cb2da79c6e3")},
+                { 58657, uint256S("0x0000000000000003821669141aaa9f95f7c5ad944bb532a67077f7ed8f2d84f2")},
             }
         };
 
