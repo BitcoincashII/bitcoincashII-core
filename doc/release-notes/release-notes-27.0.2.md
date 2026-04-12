@@ -1,43 +1,132 @@
 # Bitcoin Cash II (BCH2) Core v27.0.2 Release Notes
 
-## ⚠️ REQUIRED ACTION — RESTART WITH `-reindex`
+## ⚠️ REQUIRED ACTION — UPGRADE AND REINDEX
 
 **All node operators and miners must upgrade to v27.0.2 and restart with `-reindex`.**
 
-1. Stop your node: `bitcoincashII-cli stop`
-2. Replace the binary with v27.0.2
-3. Start with reindex: `bitcoincashIId -reindex`
-4. Wait ~5 minutes for sync to complete
+**Replacing the binary alone is NOT enough.** v27.0.2 checkpoints only take effect when
+the chain is re-validated from disk. Without `-reindex`, your node stays on whatever
+chain it was on before the upgrade — including the dead shadow chain.
 
-The reindex is required so the new checkpoints can validate existing chain data and, for
-nodes that followed the reorg chain, switch back to the legitimate chain.
+---
+
+### Upgrade Instructions
+
+#### Linux (daemon / systemd)
+
+```bash
+bitcoincashII-cli stop
+# Wait for the process to fully exit:
+pgrep -x bitcoincashIId    # must print nothing before continuing
+# Replace the binary with v27.0.2, then:
+bitcoincashIId -reindex -daemon
+```
+
+Once synced, stop the node and restart normally without `-reindex`. The flag is one-shot.
+
+#### Windows (Qt GUI)
+
+Close the wallet (File → Exit). Press **Win+R**, paste the following exactly (quotes required), and press Enter:
+
+```
+"C:\Program Files\Bitcoin Cash II\bitcoincashII-qt.exe" -reindex
+```
+
+Wait for "Reindexing blocks…" to finish in the status bar. Then close and reopen
+the wallet normally from the Start menu (no flag needed).
+
+#### Linux (Qt GUI)
+
+Close the wallet, then in a terminal:
+
+```bash
+bitcoincashII-qt -reindex
+```
+
+Once synced, close and reopen normally.
+
+#### Docker
+
+**Do NOT use `docker exec` to reindex.** Docker's restart policy will restart the
+container with the original command (without `-reindex`), silently undoing your reindex.
+This is the most common cause of failed upgrades.
+
+**The correct way:** add `-reindex` to your container's startup command.
+
+If using **docker-compose**, edit your `docker-compose.yml`:
+
+```yaml
+command: bitcoincashIId -reindex
+```
+
+Then:
+
+```bash
+docker-compose down
+docker-compose up -d
+docker logs -f <container>
+```
+
+Watch the log for `UpdateTip` climbing to the current chain tip. When synced, remove
+`-reindex` from the yml and restart:
+
+```bash
+docker-compose down
+docker-compose up -d
+```
+
+If using **plain docker run**, stop and remove the container, then run a new one with
+`-reindex` added to the command. After sync, stop and rerun without `-reindex`.
+
+---
+
+### Verify You Are On The Correct Chain
+
+After reindex, run this command (in the Qt debug console via Window → Console, or on
+the command line):
+
+```
+bitcoincashII-cli getblockhash 58595
+```
+
+**Expected result:**
+
+```
+0000000000000001481cd824d3b6339488608b6c95b82edad70b89ad1387dacf
+```
+
+If you get **any other hash**, the reindex did not take effect. Common causes:
+
+- The `-reindex` flag was not on the actual running process (check with
+  `ps auxww | grep bitcoincashIId` on Linux, or Task Manager → Details on Windows)
+- On Docker: the container restarted with the original command (see Docker section above)
+- The binary is not actually v27.0.2 (verify with `bitcoincashIId -version`)
 
 ---
 
 ## Summary
 
-This is a critical release that adds checkpoint protection against a deep chain
-reorganization observed on 2026-04-11. All node operators and miners should upgrade
-immediately.
+This is a critical release that adds checkpoint protection following a chain split on
+2026-04-11.
 
----
+BCH2 v27.0.0 shipped with a CashToken deserialization bug: `OutputToken::Unserialize`
+called `ReadCompactSize(s)` with the default 32 MiB buffer-safety range check enabled.
+Any CashToken transaction with `amount > 33,554,432` caused the node to throw
+`ReadCompactSize(): size too large` and reject the containing block entirely.
 
-## What Happened
+This bug is not present in Bitcoin Cash Node (BCHN), which uses
+`CompactSizeFormatter<false /* no range check here */>` and has done so since at least
+BCHN v27.0.0. The bug was introduced during BCH2's fork when the serialization code was
+rewritten in a simplified form; the deliberate disabling of range checking that BCHN's
+code documents in an inline comment was not carried over.
 
-On 2026-04-11 a 34-block deep reorganization was observed on the BCH2 network, forking
-from block 58594. Nodes running v27.0.1 correctly rejected the reorg because
-auto-finalization had already locked past the fork point:
+v27.0.1 fixed the bug on 2026-04-10 by calling `ReadCompactSize(s, false)`. When the
+first CashToken transaction with an amount exceeding the threshold was mined into block
+58595 on 2026-04-11 at 04:14 UTC, every v27.0.0 node on the network crashed out of
+block validation and began mining an empty-block shadow chain from block 58594.
 
-```
-BCH2: Rejecting reorg that would cross finalization at height 58612 (fork at 58594)
-```
-
-Nodes running v27.0.0 (whose finalization had not yet locked block 58594) accepted the
-reorg and ended up on the wrong chain. The original chain — the one followed by v27.0.1
-nodes — is the legitimate chain.
-
-v27.0.2 hard-codes checkpoints for the original chain so that all nodes converge on the
-correct history regardless of the state of their auto-finalization cache.
+v27.0.2 adds hard-coded checkpoints so that no node — new or restored — can be drawn
+onto the shadow chain, regardless of its finalization state when it first syncs.
 
 ---
 
@@ -69,21 +158,9 @@ fork point:
 
 ---
 
-## Who Needs To Do What
-
-- **Nodes on v27.0.1** (on the original chain): upgrade to v27.0.2 and restart with
-  `-reindex`. Your chain is already correct; the reindex lets the new checkpoints take
-  effect.
-- **Nodes on v27.0.0** (on the reorg chain): upgrade to v27.0.2 and restart with
-  `-reindex`. Your node will switch back to the legitimate chain during reindex.
-- **Mining pools**: upgrade immediately and restart with `-reindex`. Do not mine on top
-  of the reorg chain.
-
----
-
 ## Notes
 
-- No user funds are lost. Transactions that were included only on the reorg chain will
+- No user funds are lost. Transactions that were included only on the shadow chain will
   need to be rebroadcast on the legitimate chain.
 - This release does not change consensus rules beyond the added checkpoints.
 - v27.0.2 is otherwise identical to v27.0.1.
