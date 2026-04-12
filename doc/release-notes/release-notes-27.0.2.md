@@ -1,12 +1,31 @@
 # Bitcoin Cash II (BCH2) Core v27.0.2 Release Notes
 
-## ⚠️ REQUIRED ACTION — UPGRADE AND REINDEX
+## ⚠️ REQUIRED ACTION — UPGRADE AND RESYNC
 
-**All node operators and miners must upgrade to v27.0.2 and restart with `-reindex`.**
+**All node operators and miners must upgrade to v27.0.2.**
 
-**Replacing the binary alone is NOT enough.** v27.0.2 checkpoints only take effect when
-the chain is re-validated from disk. Without `-reindex`, your node stays on whatever
-chain it was on before the upgrade — including the dead shadow chain.
+**Replacing the binary alone is NOT enough.** Your node must re-validate chain data
+against the new checkpoints. There are two methods — if `-reindex` does not work
+(common for nodes that were on the shadow chain), use the **delete and resync** method.
+
+### Method 1: `-reindex` (works if your node was previously on the legit chain)
+
+Restart once with `-reindex`. See platform-specific instructions below.
+
+### Method 2: Delete and resync (recommended if `-reindex` did not fix your chain)
+
+If after reindex your node is still on the wrong chain, delete the `blocks` and
+`chainstate` folders from your data directory and restart normally. The node will
+re-download the correct chain from peers automatically.
+
+**Do NOT delete** your wallet files, configuration, or anything else — only `blocks`
+and `chainstate`.
+
+| Platform | Data directory |
+|---|---|
+| Linux | `~/.bitcoincashII/` or `~/.bch2/` |
+| Windows | `%APPDATA%\Bitcoin Cash II\` or `%APPDATA%\BitcoinCashII\` |
+| Docker | Wherever your volume is mounted |
 
 ---
 
